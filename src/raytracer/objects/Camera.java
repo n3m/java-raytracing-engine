@@ -19,13 +19,17 @@ public class Camera extends Object3D {
 	// 1 is fovv
 	private float[] fieldOfView = new float[2];
 	private float defaultZ = 15f;
+	private float maxPlane = 10f;
+	private float minPlane = 2f;
 	private int[] resolution;
 
-	public Camera(Vector3D position, float fieldOfViewHorizontal, float fieldOfViewVertical, int widthResolution, int heightResolution) {
+	public Camera(Vector3D position, float fieldOfViewHorizontal, float fieldOfViewVertical, int widthResolution, int heightResolution, float maxPlane, float minPlane) {
 		super(position, Color.black);
 		setFieldOfViewHorizontal(fieldOfViewHorizontal);
 		setFieldOfViewVertical(fieldOfViewVertical);
 		setResolution(new int[] { widthResolution, heightResolution });
+		setMaxPlane(maxPlane);
+		setMinPlane(minPlane);
 	}
 
 	public float getDefaultZ() {
@@ -93,5 +97,21 @@ public class Camera extends Object3D {
 	@Override
 	public Intersection getIntersection(Ray ray) {
 		return new Intersection(Vector3D.ZERO(), -1, Vector3D.ZERO(), null);
+	}
+
+	public float getMaxPlane() {
+		return maxPlane;
+	}
+
+	public void setMaxPlane(float maxPlane) {
+		this.maxPlane = maxPlane;
+	}
+
+	public float getMinPlane() {
+		return minPlane;
+	}
+
+	public void setMinPlane(float minPlane) {
+		this.minPlane = minPlane;
 	}
 }

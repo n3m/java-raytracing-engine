@@ -28,12 +28,15 @@ public class Raytracer {
 		System.out.println(new Date());
 
 		Scene scene01 = new Scene();
-		scene01.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800));
+		scene01.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 15f, 2f));
 		scene01.addObject(new Sphere(new Vector3D(0f, 1f, 5f), 0.5f, Color.RED));
 		scene01.addObject(new Sphere(new Vector3D(0.5f, 1f, 4.5f), 0.25f, Color.GREEN));
 		scene01.addObject(new Sphere(new Vector3D(0.35f, 1f, 4.5f), 0.3f, Color.BLUE));
 		scene01.addObject(new Sphere(new Vector3D(4.85f, 1f, 4.5f), 0.3f, Color.PINK));
 		scene01.addObject(new Sphere(new Vector3D(2.85f, 1f, 304.5f), 0.5f, Color.BLUE));
+		//TEST
+		scene01.addObject(new Sphere(new Vector3D(0.5, 0.5, 2f), 0.9f, Color.YELLOW));
+		scene01.addObject(new Sphere(new Vector3D(3f, 3f, 50f), 2f, Color.BLACK));
 
 		BufferedImage image = raytrace(scene01);
 		File outputImage = new File("image.png");
@@ -46,19 +49,22 @@ public class Raytracer {
 		System.out.println(new Date());
 	}
 
-	public static Intersection raycast(Ray ray, ArrayList<Object3D> objects, Object3D caster) {
+	public static Intersection raycast(Ray ray, ArrayList<Object3D> objects, Object3D caster, Camera cam) {
 		Intersection closestIntersection = null;
 
 		for (int k = 0; k < objects.size(); k++) {
 			Object3D currentObj = objects.get(k);
-
+			
+			
 			if (caster == null || !currentObj.equals(caster)) {
 				Intersection intersection = currentObj.getIntersection(ray);
 				if (intersection != null) {
 					double distance = intersection.getDistance();
-
-					if (distance >= 0 && (closestIntersection == null || distance < closestIntersection.getDistance())) {
-						closestIntersection = intersection;
+					
+					if(distance >= 0 && (closestIntersection == null) || distance < closestIntersection.getDistance()) {
+						if(currentObj.getPosition().getZ() < cam.getMaxPlane() && currentObj.getPosition().getZ() > cam.getMinPlane()) {
+							closestIntersection = intersection;
+						}
 					}
 				}
 			}
@@ -80,7 +86,7 @@ public class Raytracer {
 				double z = positionsToRaytrace[i][j].getZ() + mainCamera.getPosition().getZ();
 				Ray ray = new Ray(mainCamera.getPosition(), new Vector3D(x, y, z));
 
-				Intersection closestIntersection = raycast(ray, objects, null);
+				Intersection closestIntersection = raycast(ray, objects, null, mainCamera);
 
 				// Background color
 				Color pixelColor = Color.WHITE;
