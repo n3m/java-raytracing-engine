@@ -4,19 +4,20 @@
  */
 package raytracer;
 
-import raytracer.objects.Sphere;
-import raytracer.objects.Triangle;
-import raytracer.objects.Camera;
-import raytracer.objects.Object3D;
-import raytracer.objects.Polygon;
-
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+
 import javax.imageio.ImageIO;
+
+import raytracer.objects.Camera;
+import raytracer.objects.Object3D;
+import raytracer.objects.Polygon;
+import raytracer.objects.Sphere;
+import raytracer.objects.Triangle;
 
 /**
  *
@@ -33,21 +34,41 @@ public class Raytracer {
 	public static void main(String[] args) {
 		System.out.println("AEMN -> Ray Tracer v" + version);
 		System.out.println(new Date());
-
+		
 		Scene sceneRoot = new Scene();
 		// Camera final values are MaxPlane, MinPlane
-		sceneRoot.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 100f, 2f));
+		sceneRoot.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 100f, -6f));
 		sceneRoot.addObject(new Sphere(new Vector3D(0f, 1f, 5f), 0.5f, Color.RED));
 		sceneRoot.addObject(new Sphere(new Vector3D(0.5f, 1f, 4.5f), 0.25f, Color.GREEN));
 		sceneRoot.addObject(new Sphere(new Vector3D(0.35f, 1f, 4.5f), 0.3f, Color.BLUE));
 		sceneRoot.addObject(new Sphere(new Vector3D(2.85f, 1f, 304.5f), 0.5f, Color.BLUE));
-		//TEST
 		sceneRoot.addObject(new Sphere(new Vector3D(0.5, 0.5, 2f), 0.9f, Color.YELLOW));
 		sceneRoot.addObject(new Sphere(new Vector3D(3f, 3f, 50f), 2f, Color.BLACK));
-		Polygon testPoly = new Polygon(Vector3D.ZERO(), Color.MAGENTA);
+		Polygon thePoly = new Polygon(Vector3D.ZERO(), Color.MAGENTA);
 		Triangle tr1 = new Triangle(new Vector3D(-1, -1, 39.02868899114471), new Vector3D(0, -1, 14.070863778868507), new Vector3D(1, 1, 31.500551943697843));
-		testPoly.AddTriangle(tr1);
-		sceneRoot.addObject(testPoly);
+		Triangle tr2 = new Triangle(new Vector3D(-2.0, -1.0, 26.892819725967946), new Vector3D(-1.0, -1.0, 15.333571175279207), new Vector3D(0.0, -2.0, 17.566473562178228));
+		Triangle tr3 = new Triangle(new Vector3D(1.0, -2.0, 23.1439998056955), new Vector3D(1.0, -2.0, 12.243802272349294), new Vector3D(1.0, -1.0, 22.9838760874721));
+		
+		thePoly.AddTriangle(tr1);
+		thePoly.AddTriangle(tr2);
+		thePoly.AddTriangle(tr3);
+		
+		//Add a single polygon
+		sceneRoot.addObject(thePoly);
+		
+		// OBJ Loader
+		Vector3D defPos = Vector3D.ZERO();
+		defPos.setZ(20f);
+		
+		Polygon temp = OBJReader.getPolyFromOBJ("lowpoly", defPos, Color.CYAN);
+		/*Polygon CubeQuad = OBJReader.getPolyFromOBJ("CubeQuad", defPos, Color.RED);
+		Polygon Ring = OBJReader.getPolyFromOBJ("ring", defPos, Color.ORANGE);
+		Polygon Teapot = OBJReader.getPolyFromOBJ("smallTeapot", defPos, Color.DARK_GRAY);*/
+		
+		sceneRoot.addObject(temp);
+		/*sceneRoot.addObject(CubeQuad);
+		sceneRoot.addObject(Ring);
+		sceneRoot.addObject(Teapot);*/
 
 		BufferedImage image = raytrace(sceneRoot);
 		File outputImage = new File("image.png");
@@ -69,9 +90,6 @@ public class Raytracer {
 					Intersection intersection = currentObj.getIntersection(ray);
 					if (intersection != null) {
 						double distance = intersection.getDistance();
-						if(Double.isNaN(distance)) {
-							continue;
-						}
 						if (distance >= 0 && (closestIntersection == null) || distance < closestIntersection.getDistance()) {
 							if (intersection.getPosition().getZ() <= cam.getMaxPlane() && intersection.getPosition().getZ() >= cam.getMinPlane()) {
 								closestIntersection = intersection;
@@ -80,9 +98,7 @@ public class Raytracer {
 					}
 				}
 			}
-
 	return closestIntersection;
-
 	}
 
 	public static BufferedImage raytrace(Scene scene) {

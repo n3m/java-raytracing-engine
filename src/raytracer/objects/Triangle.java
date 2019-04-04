@@ -14,6 +14,10 @@ public class Triangle{
 		setVector2(v2);
 	}
 	
+	public double calculateNormal() {
+		return 0d;
+	}
+	
 	public Vector3D getVector0() {
 		return Vector0;
 	}
