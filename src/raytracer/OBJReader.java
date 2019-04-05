@@ -19,6 +19,10 @@ public class OBJReader {
 	protected static Color def_col;
 	
 	public static Polygon getPolyFromOBJ(String filename, Vector3D position, Color color) {
+		vertices.clear();
+		vertNormal.clear();
+		faces.clear();
+		tri.clear();
 		def_pos = position;
 		def_col = color;
 		ArrayList<String> objContent = new ArrayList<String>();
