@@ -61,7 +61,7 @@ public class Raytracer {
 		Polygon ring = OBJReader.getPolyFromOBJ("ring", new Vector3D(1f, 1.5f, 3f), Color.RED);
 		Polygon CubeQuad = OBJReader.getPolyFromOBJ("CubeQuad", new Vector3D(-2f, 0f, 7f), Color.BLACK);
 		Polygon cube = OBJReader.getPolyFromOBJ("cube", new Vector3D(.5f, .5f, 1f), Color.ORANGE);
-		Polygon Teapot = OBJReader.getPolyFromOBJ("smallTeapot", new Vector3D(1f, -1, 8f), Color.DARK_GRAY);
+		//Polygon Teapot = OBJReader.getPolyFromOBJ("smallTeapot", new Vector3D(1f, -1, 8f), Color.DARK_GRAY);
 		
 		sceneRoot.addObject(ring);
 		sceneRoot.addObject(CubeQuad);
