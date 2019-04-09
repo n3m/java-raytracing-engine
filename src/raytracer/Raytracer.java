@@ -29,7 +29,7 @@ public class Raytracer {
 	 * @param args the command line arguments
 	 */
 
-	private static String version = "0.3";
+	private static String version = "0.4";
 
 	public static void main(String[] args) {
 		System.out.println("AEMN -> Ray Tracer v" + version);
@@ -46,8 +46,9 @@ public class Raytracer {
 		sceneRoot.addObject(new Sphere(new Vector3D(0.5, 0.5, 2f), 0.9f, Color.YELLOW));
 		sceneRoot.addObject(new Sphere(new Vector3D(3f, 3f, 50f), 2f, Color.BLACK));
 		sceneRoot.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(0f, -2.5f, 1f), Color.CYAN));
-		sceneRoot.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(2f, -1.0f, 1.5f), Color.blue));
+		sceneRoot.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(2f, -1.0f, 1.5f), Color.ORANGE));
 		sceneRoot.addObject(OBJReader.GetPolygon("ring.obj", new Vector3D(2f, -1.0f, 1.5f), Color.blue));
+		sceneRoot.addObject(OBJReader.GetPolygon("lowpoly.obj", new Vector3D(2f, -1.0f, 20f), Color.MAGENTA));
 		
 		BufferedImage image = raytrace(sceneRoot);
 		File outputImage = new File("image.png");

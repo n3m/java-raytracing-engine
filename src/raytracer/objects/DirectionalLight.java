@@ -23,5 +23,9 @@ public class DirectionalLight {
 		this.lightColor = lightColor;
 		this.intensity = intensity;
 	}
+	
+	public DirectionalLight() {
+		
+	}
 
 }
