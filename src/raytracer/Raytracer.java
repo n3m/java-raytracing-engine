@@ -30,7 +30,7 @@ public class Raytracer {
 	 * @param args the command line arguments
 	 */
 
-	private static String version = "0.4";
+	private static String version = "0.5";
 
 	public static void main(String[] args) {
 		System.out.println("AEMN -> Ray Tracer v" + version);
