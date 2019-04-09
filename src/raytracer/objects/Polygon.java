@@ -1,81 +1,72 @@
+
 package raytracer.objects;
 
 import java.awt.Color;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import raytracer.Intersection;
 import raytracer.Ray;
 import raytracer.Vector3D;
 
+/**
+ *
+ * @author User
+ */
 public class Polygon extends Object3D {
 
-	public ArrayList<Triangle> triInPol = new ArrayList<Triangle>();
+    public static final int AMOUNT_VERTICES = 3;
 
-	public Polygon(Vector3D position, Color color) {
-		super(position, color);
-		// TODO Auto-generated constructor stub
-	}
+    private List<Triangle> triangles;
 
-	@Override
-	public Intersection getIntersection(Ray ray) {
-		// TODO Auto-generated method stub
-		Intersection intersection = null;
-		Intersection closestIntersection = null;
-		
-		double dt = 0;
+    public Polygon(Vector3D position, Triangle[] triangles, Color color) {
+        super(position, color);
+        setTriangles(triangles);
+    }
 
-		Vector3D normal = Vector3D.ZERO();
-		Vector3D position = Vector3D.ZERO();
-		double epsilon = 0d;
+    public List<Triangle> getTriangles() {
+        return triangles;
+    }
 
-		for (Triangle triangle : triInPol) {
-			Vector3D Vector0 = triangle.getVector0();
-			Vector3D Vector1 = triangle.getVector1();
-			Vector3D Vector2 = triangle.getVector2();
+    public void setTriangles(Triangle[] triangles) {
+        Vector3D position = getPosition();
+        Set<Vector3D> uniqueVertices = new HashSet<Vector3D>();
 
-			Vector3D v2v0 = Vector3D.substract(Vector2, Vector0);
-			Vector3D v1v0 = Vector3D.substract(Vector1, Vector0);
+        for (Triangle triangle : triangles) {
+            uniqueVertices.addAll(Arrays.asList(triangle.getVertices()));
+        }
 
-			Vector3D O = ray.getOrigin();
-			Vector3D D = ray.getDirection();
-			Vector3D P = Vector3D.crossProduct(D, v1v0);
+        for (Vector3D vertex : uniqueVertices) {
+            vertex.setX(vertex.getX() + position.getX());
+            vertex.setY(vertex.getY() + position.getY());
+            vertex.setZ(vertex.getZ() + position.getZ());
+        }
 
-			double determinant = Vector3D.dotProduct(v2v0, P);
-			double invDet = 1.0 / determinant;
+        this.triangles = Arrays.asList(triangles);
+    }
 
-			Vector3D T = Vector3D.substract(O, Vector0);
-			double u = invDet * Vector3D.dotProduct(T, P);
+    public Intersection getIntersection(Ray ray) {
+        double distance = -1;
+        Vector3D normal = Vector3D.ZERO();
+        Vector3D position = Vector3D.ZERO();
 
-			if (u < 0 || u > 1) {
-				intersection = null;
-			} else {
-				Vector3D Q = Vector3D.crossProduct(T, v2v0);
-				double v = invDet * Vector3D.dotProduct(D, Q);
+        for (Triangle triangle : getTriangles()) {
+            double intersection = triangle.getIntersection(ray);
 
-				if (v < 0 || (u + v) > (1.0 + epsilon)) {
-					intersection = null;
-				} else {
-					dt = invDet * Vector3D.dotProduct(Q, v1v0);
-					position.setZ(dt);
-					intersection = new Intersection(position, dt, normal, this);
-				}
-			}
+            if (intersection > 0 && (intersection < distance || distance < 0)) {
+                distance = intersection;
+                position = Vector3D.add(ray.getOrigin(), Vector3D.scalarMultiplication(ray.getDirection(), distance));
+                normal = triangle.getNormal();
+            }
+        }
 
-			if (intersection != null) {
-				double distance = intersection.getDistance();
-				if (distance >= 0 && (closestIntersection == null) || distance < closestIntersection.getDistance()) {
-					closestIntersection = intersection;
-				}
-			}
-		}
-		return closestIntersection;
-	}
+        if (distance == -1) {
+            return null;
+        }
 
-	public ArrayList<Triangle> getTriangles() {
-		return triInPol;
-	}
+        return new Intersection(position, distance, normal, this);
+    }
 
-	public void AddTriangle(Triangle tempVar) {
-		triInPol.add(tempVar);
-	}
 }
