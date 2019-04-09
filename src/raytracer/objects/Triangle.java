@@ -1,6 +1,8 @@
 
 package raytracer.objects;
 
+import java.awt.Color;
+
 import raytracer.Ray;
 import raytracer.Vector3D;
 
@@ -92,6 +94,7 @@ public class Triangle {
 
         return t;
     }
+    
 
     private void setNormal(Vector3D[] normals) {
         this.normals = normals;

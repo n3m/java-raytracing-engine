@@ -5,6 +5,7 @@
 package raytracer;
 
 import raytracer.objects.Camera;
+import raytracer.objects.DirectionalLight;
 import raytracer.objects.Object3D;
 import java.util.ArrayList;
 
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 public class Scene {
     private Camera camera;
     private ArrayList<Object3D> objects;
+    private DirectionalLight light;
 
     public Scene(){
         setObjects(new ArrayList<Object3D>());
@@ -39,5 +41,13 @@ public class Scene {
     public void setCamera(Camera camera) {
         this.camera = camera;
     }
+
+	public DirectionalLight getLight() {
+		return light;
+	}
+
+	public void setLight(DirectionalLight light) {
+		this.light = light;
+	}
     
 }

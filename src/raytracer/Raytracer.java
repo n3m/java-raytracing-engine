@@ -14,6 +14,7 @@ import java.util.Date;
 import javax.imageio.ImageIO;
 
 import raytracer.objects.Camera;
+import raytracer.objects.DirectionalLight;
 import raytracer.objects.Object3D;
 import raytracer.objects.Polygon;
 import raytracer.objects.Sphere;
@@ -38,6 +39,7 @@ public class Raytracer {
 		Scene sceneRoot = new Scene();
 		// Camera final values are MaxPlane, MinPlane
 		sceneRoot.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 100f, -6f));
+		sceneRoot.setLight(new DirectionalLight(new Vector3D(0f, 0f, 1f)));
 		
 		sceneRoot.addObject(new Sphere(new Vector3D(0f, 1f, 5f), 0.5f, Color.RED));
 		sceneRoot.addObject(new Sphere(new Vector3D(0.5f, 1f, 4.5f), 0.25f, Color.GREEN));
@@ -48,7 +50,7 @@ public class Raytracer {
 		sceneRoot.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(0f, -2.5f, 1f), Color.CYAN));
 		sceneRoot.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(2f, -1.0f, 1.5f), Color.ORANGE));
 		sceneRoot.addObject(OBJReader.GetPolygon("ring.obj", new Vector3D(2f, -1.0f, 1.5f), Color.blue));
-		sceneRoot.addObject(OBJReader.GetPolygon("lowpoly.obj", new Vector3D(2f, -1.0f, 20f), Color.MAGENTA));
+		//sceneRoot.addObject(OBJReader.GetPolygon("lowpoly.obj", new Vector3D(2f, -1.0f, 20f), Color.MAGENTA));
 		
 		BufferedImage image = raytrace(sceneRoot);
 		File outputImage = new File("image.png");
@@ -100,7 +102,7 @@ public class Raytracer {
 				// Background color
 				Color pixelColor = Color.WHITE;
 				if (closestIntersection != null) {
-					pixelColor = closestIntersection.getObject().getColor();
+					pixelColor = FlatShading(closestIntersection.getObject().getColor(), scene.getLight().getLightColor(), scene.getLight(), closestIntersection.getNormal());
 				}
 				image.setRGB(i, j, pixelColor.getRGB());
 			}
@@ -108,5 +110,28 @@ public class Raytracer {
 
 		return image;
 	}
+	
+	 private static Color FlatShading(Color ObjectColor, Color LightColor, DirectionalLight light, Vector3D normal) {
+		 	//System.out.println("==================");
+	    	Color newColor = null;
+	    	Vector3D lightDir = light.getDirection();
+	    	Vector3D ObjectNormal = normal;
+	    	
+	    	double NxL = Vector3D.dotProduct(lightDir, ObjectNormal);
+	    	//System.out.println("Dot Product:" + NxL);
+	    	//System.out.println("Intensity: " + light.getIntensity());
+	    	
+	    	float theMultiplier = (float)(NxL * light.getIntensity());
+	    	//System.out.println("Multiplier: " + theMultiplier);
+	    	
+	    	float newRed = Math.abs((((ObjectColor.getRed() * LightColor.getRed())/255F) * theMultiplier) / 255f);
+	    	float newGreen = Math.abs((((ObjectColor.getGreen() * LightColor.getGreen())/255f) * theMultiplier) / 255f);
+	    	float newBlue = Math.abs((((ObjectColor.getBlue() * LightColor.getBlue())/255f) * theMultiplier) / 255f);
+	    	
+	    	//System.out.println("Red: " + newRed + " | Green: " + newGreen + " | Blue: " + newBlue);
+	    	newColor = new Color(newRed , newGreen, newBlue);
+	    	
+	    	return newColor;
+	    }
 
 }
