@@ -39,7 +39,7 @@ public class Raytracer {
 		Scene sceneRoot = new Scene();
 		// Camera final values are MaxPlane, MinPlane
 		sceneRoot.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 100f, -6f));
-		sceneRoot.setLight(new DirectionalLight(new Vector3D(-.5f, 0.5f, 1f)));
+		sceneRoot.setLight(new DirectionalLight(new Vector3D(0f, 0f, 1f)));
 		
 		sceneRoot.addObject(new Sphere(new Vector3D(0f, 1f, 5f), 0.5f, Color.RED));
 		sceneRoot.addObject(new Sphere(new Vector3D(-1.5f, 1.5f, 4.5f), 0.3f, Color.BLUE));
