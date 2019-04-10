@@ -39,14 +39,10 @@ public class Raytracer {
 		Scene sceneRoot = new Scene();
 		// Camera final values are MaxPlane, MinPlane
 		sceneRoot.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 100f, -6f));
-		sceneRoot.setLight(new DirectionalLight(new Vector3D(0f, 0f, 1f)));
+		sceneRoot.setLight(new DirectionalLight(new Vector3D(-.5f, 0.5f, 1f)));
 		
 		sceneRoot.addObject(new Sphere(new Vector3D(0f, 1f, 5f), 0.5f, Color.RED));
-		sceneRoot.addObject(new Sphere(new Vector3D(0.5f, 1f, 4.5f), 0.25f, Color.GREEN));
-		sceneRoot.addObject(new Sphere(new Vector3D(0.35f, 1f, 4.5f), 0.3f, Color.BLUE));
-		sceneRoot.addObject(new Sphere(new Vector3D(2.85f, 1f, 304.5f), 0.5f, Color.BLUE));
-		sceneRoot.addObject(new Sphere(new Vector3D(0.5, 0.5, 2f), 0.9f, Color.YELLOW));
-		sceneRoot.addObject(new Sphere(new Vector3D(3f, 3f, 50f), 2f, Color.BLACK));
+		sceneRoot.addObject(new Sphere(new Vector3D(-1.5f, 1.5f, 4.5f), 0.3f, Color.BLUE));
 		sceneRoot.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(0f, -2.5f, 1f), Color.CYAN));
 		sceneRoot.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(2f, -1.0f, 1.5f), Color.ORANGE));
 		sceneRoot.addObject(OBJReader.GetPolygon("ring.obj", new Vector3D(2f, -1.0f, 1.5f), Color.blue));
@@ -129,6 +125,15 @@ public class Raytracer {
 	    	float newBlue = Math.abs((((ObjectColor.getBlue() * LightColor.getBlue())/255f) * theMultiplier) / 255f);
 	    	
 	    	//System.out.println("Red: " + newRed + " | Green: " + newGreen + " | Blue: " + newBlue);
+	    	if(newRed > 1) {
+	    		newRed = 1;
+	    	}
+	    	if (newBlue > 1) {
+	    		newBlue = 1;
+	    	}
+	    	if (newGreen > 1) {
+	    		newGreen = 1;
+	    	}
 	    	newColor = new Color(newRed , newGreen, newBlue);
 	    	
 	    	return newColor;
