@@ -44,7 +44,10 @@ public class Raytracer {
 		sceneRoot.addObject(new Sphere(new Vector3D(0f, 1f, 5f), 0.5f, Color.RED));
 		sceneRoot.addObject(new Sphere(new Vector3D(-1.5f, 1.5f, 4.5f), 0.3f, Color.BLUE));
 		sceneRoot.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(0f, -2.5f, 1f), Color.CYAN));
-		sceneRoot.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(2f, -1.0f, 1.5f), Color.ORANGE));
+		sceneRoot.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(2f, 2f, 1.5f), Color.ORANGE));
+		sceneRoot.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(2f, -2f, 1.5f), Color.ORANGE));
+		sceneRoot.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(-2f, -2f, 1.5f), Color.ORANGE));
+		sceneRoot.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(-2f, 2.0f, 1.5f), Color.ORANGE));
 		sceneRoot.addObject(OBJReader.GetPolygon("ring.obj", new Vector3D(2f, -1.0f, 1.5f), Color.blue));
 		//sceneRoot.addObject(OBJReader.GetPolygon("lowpoly.obj", new Vector3D(2f, -1.0f, 20f), Color.MAGENTA));
 		
