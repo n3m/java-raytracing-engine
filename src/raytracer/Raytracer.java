@@ -49,8 +49,7 @@ public class Raytracer {
 		sceneRoot.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(-2f, -2f, 1.5f), Color.ORANGE));
 		sceneRoot.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(-2f, 2.0f, 1.5f), Color.ORANGE));
 		sceneRoot.addObject(OBJReader.GetPolygon("ring.obj", new Vector3D(2f, 0f, 1.5f), Color.blue));
-		//sceneRoot.addObject(OBJReader.GetPolygon("lowpoly.obj", new Vector3D(2f, -1.0f, 20f), Color.MAGENTA));
-		
+
 		BufferedImage image = raytrace(sceneRoot);
 		File outputImage = new File("image.png");
 		try {
@@ -111,23 +110,17 @@ public class Raytracer {
 	}
 	
 	 private static Color FlatShading(Color ObjectColor, Color LightColor, DirectionalLight light, Vector3D normal) {
-		 	//System.out.println("==================");
 	    	Color newColor = null;
 	    	Vector3D lightDir = light.getDirection();
 	    	Vector3D ObjectNormal = normal;
 	    	
 	    	double NxL = Vector3D.dotProduct(lightDir, ObjectNormal);
-	    	//System.out.println("Dot Product:" + NxL);
-	    	//System.out.println("Intensity: " + light.getIntensity());
-	    	
 	    	float theMultiplier = (float)(NxL * light.getIntensity());
-	    	//System.out.println("Multiplier: " + theMultiplier);
-	    	
+
 	    	float newRed = Math.abs((((ObjectColor.getRed() * LightColor.getRed())/255F) * theMultiplier) / 255f);
 	    	float newGreen = Math.abs((((ObjectColor.getGreen() * LightColor.getGreen())/255f) * theMultiplier) / 255f);
 	    	float newBlue = Math.abs((((ObjectColor.getBlue() * LightColor.getBlue())/255f) * theMultiplier) / 255f);
 	    	
-	    	//System.out.println("Red: " + newRed + " | Green: " + newGreen + " | Blue: " + newBlue);
 	    	if(newRed > 1) {
 	    		newRed = 1;
 	    	}
