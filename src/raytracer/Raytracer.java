@@ -48,7 +48,7 @@ public class Raytracer {
 		sceneRoot.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(2f, -2f, 1.5f), Color.ORANGE));
 		sceneRoot.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(-2f, -2f, 1.5f), Color.ORANGE));
 		sceneRoot.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(-2f, 2.0f, 1.5f), Color.ORANGE));
-		sceneRoot.addObject(OBJReader.GetPolygon("ring.obj", new Vector3D(2f, -1.0f, 1.5f), Color.blue));
+		sceneRoot.addObject(OBJReader.GetPolygon("ring.obj", new Vector3D(2f, 0f, 1.5f), Color.blue));
 		//sceneRoot.addObject(OBJReader.GetPolygon("lowpoly.obj", new Vector3D(2f, -1.0f, 20f), Color.MAGENTA));
 		
 		BufferedImage image = raytrace(sceneRoot);
