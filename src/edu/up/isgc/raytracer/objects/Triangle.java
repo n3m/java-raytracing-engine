@@ -1,14 +1,15 @@
+/**
+ *  2019 - Universidad Panamericana 
+ *  All Rights Reserved
+ */
+package edu.up.isgc.raytracer.objects;
 
-package raytracer.objects;
-
-import java.awt.Color;
-
-import raytracer.Ray;
-import raytracer.Vector3D;
+import edu.up.isgc.raytracer.Ray;
+import edu.up.isgc.raytracer.Vector3D;
 
 /**
  *
- * @author User
+ * @author Jafet
  */
 public class Triangle {
 
@@ -94,7 +95,6 @@ public class Triangle {
 
         return t;
     }
-    
 
     private void setNormal(Vector3D[] normals) {
         this.normals = normals;
