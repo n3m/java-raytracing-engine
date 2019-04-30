@@ -1,19 +1,21 @@
+/**
+ *  2019 - Universidad Panamericana 
+ *  All Rights Reserved
+ */
+package edu.up.isgc.raytracer.objects;
 
-package raytracer.objects;
-
+import edu.up.isgc.raytracer.Intersection;
+import edu.up.isgc.raytracer.Ray;
+import edu.up.isgc.raytracer.Vector3D;
 import java.awt.Color;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import raytracer.Intersection;
-import raytracer.Ray;
-import raytracer.Vector3D;
-
 /**
  *
- * @author User
+ * @author Jafet
  */
 public class Polygon extends Object3D {
 

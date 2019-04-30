@@ -1,6 +1,12 @@
+/**
+ *  2019 - Universidad Panamericana 
+ *  All Rights Reserved
+ */
+package edu.up.isgc.raytracer.tools;
 
-package raytracer;
-
+import edu.up.isgc.raytracer.Vector3D;
+import edu.up.isgc.raytracer.objects.Polygon;
+import edu.up.isgc.raytracer.objects.Triangle;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -11,12 +17,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import raytracer.objects.Polygon;
-import raytracer.objects.Triangle;
-
 /**
  *
- * @author User
+ * @author Jafet
  */
 public class OBJReader {
     

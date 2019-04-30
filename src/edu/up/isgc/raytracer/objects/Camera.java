@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package raytracer.objects;
+package edu.up.isgc.raytracer.objects;
 
-import raytracer.Intersection;
-import raytracer.Ray;
-import raytracer.Vector3D;
+import edu.up.isgc.raytracer.Intersection;
+import edu.up.isgc.raytracer.Ray;
+import edu.up.isgc.raytracer.Vector3D;
 import java.awt.Color;
 
 /**
@@ -19,17 +19,15 @@ public class Camera extends Object3D {
 	// 1 is fovv
 	private float[] fieldOfView = new float[2];
 	private float defaultZ = 15f;
-	private float maxPlane = 10f;
-	private float minPlane = 2f;
 	private int[] resolution;
+	private float[] nearFarPlanes = new float[2];
 
-	public Camera(Vector3D position, float fieldOfViewHorizontal, float fieldOfViewVertical, int widthResolution, int heightResolution, float maxPlane, float minPlane) {
+	public Camera(Vector3D position, float fieldOfViewHorizontal, float fieldOfViewVertical, int widthResolution, int heightResolution, float nearPlane, float farPlane){
 		super(position, Color.black);
 		setFieldOfViewHorizontal(fieldOfViewHorizontal);
 		setFieldOfViewVertical(fieldOfViewVertical);
 		setResolution(new int[] { widthResolution, heightResolution });
-		setMaxPlane(maxPlane);
-		setMinPlane(minPlane);
+		setNearFarPlanes(new float[]{nearPlane, farPlane});
 	}
 
 	public float getDefaultZ() {
@@ -93,25 +91,17 @@ public class Camera extends Object3D {
 
 		return positions;
 	}
+	
+	public float[] getNearFarPlanes() {
+        return nearFarPlanes;
+    }
+
+    public void setNearFarPlanes(float[] nearFarPlanes) {
+        this.nearFarPlanes = nearFarPlanes;
+    }
 
 	@Override
 	public Intersection getIntersection(Ray ray) {
 		return new Intersection(Vector3D.ZERO(), -1, Vector3D.ZERO(), null);
-	}
-
-	public float getMaxPlane() {
-		return maxPlane;
-	}
-
-	public void setMaxPlane(float maxPlane) {
-		this.maxPlane = maxPlane;
-	}
-
-	public float getMinPlane() {
-		return minPlane;
-	}
-
-	public void setMinPlane(float minPlane) {
-		this.minPlane = minPlane;
 	}
 }
