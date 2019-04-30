@@ -2,11 +2,11 @@
  *  2019 - Universidad Panamericana 
  *  All Rights Reserved
  */
-package raytracer.objects;
+package edu.up.isgc.raytracer.objects;
 
-import raytracer.Intersection;
-import raytracer.Ray;
-import raytracer.Vector3D;
+import edu.up.isgc.raytracer.Intersection;
+import edu.up.isgc.raytracer.Ray;
+import edu.up.isgc.raytracer.Vector3D;
 import java.awt.Color;
 
 /**

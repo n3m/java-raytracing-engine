@@ -2,9 +2,9 @@
  *  2019 - Universidad Panamericana 
  *  All Rights Reserved
  */
-package raytracer;
+package edu.up.isgc.raytracer;
 
-import raytracer.objects.Object3D;
+import edu.up.isgc.raytracer.objects.Object3D;
 
 /**
  *

@@ -2,7 +2,7 @@
  *  2019 - Universidad Panamericana 
  *  All Rights Reserved
  */
-package raytracer;
+package edu.up.isgc.raytracer;
 
 /**
  *
