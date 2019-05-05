@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +23,8 @@ import java.util.logging.Logger;
  * @author Jafet
  */
 public class OBJReader {
+	
+	public List<Vector3D> smoothNormals = new ArrayList<Vector3D>();
     
     public static Polygon GetPolygon(String path, Vector3D origin, Color color) {
         try {
@@ -30,6 +33,8 @@ public class OBJReader {
             List<Triangle> triangles = new ArrayList<Triangle>();
             List<Vector3D> vertices = new ArrayList<Vector3D>();
             List<Vector3D> normals = new ArrayList<Vector3D>();
+            HashMap<Integer, ArrayList<Triangle>> smoothGroups = new HashMap<Integer, ArrayList<Triangle>>();
+            
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("v ") || line.startsWith("vn ")) {
@@ -44,8 +49,11 @@ public class OBJReader {
                             normals.add(new Vector3D(x, y, z));
                         }
                     }
+                    
                 } else if (line.startsWith("f ")) {
+                	
                     String[] faceComponents = line.split("(\\s)+");
+            
                     List<Integer> faceVertex = new ArrayList<Integer>();
                     List<Integer> faceNormal = new ArrayList<Integer>();
                     
@@ -74,7 +82,7 @@ public class OBJReader {
                     }
                 }
             }
-            
+            System.out.println("=");
             reader.close();
             return new Polygon(origin, triangles.toArray(new Triangle[triangles.size()]), color);
         } catch (FileNotFoundException ex) {

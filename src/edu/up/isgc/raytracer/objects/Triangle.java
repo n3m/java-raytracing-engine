@@ -33,7 +33,7 @@ public class Triangle {
     }
 
     public Triangle(Vector3D[] vertices, Vector3D[] normal) {
-        this(vertices);
+        setVertices(vertices[0], vertices[1], vertices[2]);
         setNormal(normal);
     }
 
