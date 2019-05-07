@@ -1,5 +1,13 @@
+/**
+ *  2019 - Universidad Panamericana 
+ *  All Rights Reserved
+ */
+package edu.up.isgc.raytracer.objects;
 
-package raytracer.objects;
+import edu.up.isgc.raytracer.Intersection;
+import edu.up.isgc.raytracer.Ray;
+import edu.up.isgc.raytracer.Vector3D;
+import edu.up.isgc.raytracer.tools.Barycentric;
 
 import java.awt.Color;
 import java.util.Arrays;
@@ -7,13 +15,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import raytracer.Intersection;
-import raytracer.Ray;
-import raytracer.Vector3D;
-
 /**
  *
- * @author User
+ * @author Jafet
  */
 public class Polygon extends Object3D {
 
@@ -53,12 +57,18 @@ public class Polygon extends Object3D {
         Vector3D position = Vector3D.ZERO();
 
         for (Triangle triangle : getTriangles()) {
-            double intersection = triangle.getIntersection(ray);
+        	double intersection = triangle.getIntersection(ray);
 
             if (intersection > 0 && (intersection < distance || distance < 0)) {
-                distance = intersection;
+            	normal = Vector3D.ZERO();
+            	distance = intersection;
                 position = Vector3D.add(ray.getOrigin(), Vector3D.scalarMultiplication(ray.getDirection(), distance));
-                normal = triangle.getNormal();
+                double[] uVw = Barycentric.CalculateBarycentricCoordinates(position, triangle);
+                
+                Vector3D[] normals = triangle.getNormals();
+                for(int i = 0; i < uVw.length; i++) {
+                	normal = Vector3D.add(normal, Vector3D.scalarMultiplication(normals[i], uVw[i]));
+                }
             }
         }
 

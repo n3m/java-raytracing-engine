@@ -1,14 +1,15 @@
+/**
+ *  2019 - Universidad Panamericana 
+ *  All Rights Reserved
+ */
+package edu.up.isgc.raytracer.objects;
 
-package raytracer.objects;
-
-import java.awt.Color;
-
-import raytracer.Ray;
-import raytracer.Vector3D;
+import edu.up.isgc.raytracer.Ray;
+import edu.up.isgc.raytracer.Vector3D;
 
 /**
  *
- * @author User
+ * @author Jafet
  */
 public class Triangle {
 
@@ -44,8 +45,8 @@ public class Triangle {
         Vector3D[] vertices = new Vector3D[]{vertex1, vertex2, vertex3};
         this.vertices = vertices;
     }
-
-    public Vector3D getNormal() {
+    
+    public Vector3D getNormal(Vector3D point) {
         Vector3D normal = Vector3D.ZERO();
         
         Vector3D[] normals = this.normals;
@@ -60,8 +61,34 @@ public class Triangle {
                 normal.setX(normal.getX() + normals[i].getX());
                 normal.setY(normal.getY() + normals[i].getY());
                 normal.setZ(normal.getZ() + normals[i].getZ());
-                //normal = Vector3D.normalize(normal);
             }
+            normal.setX(normal.getX() / normals.length);
+            normal.setY(normal.getY() / normals.length);
+            normal.setZ(normal.getZ() / normals.length);
+        }
+        
+        return normal;
+    }
+    
+    public Vector3D getNormal() {
+        Vector3D normal = Vector3D.ZERO();
+        
+        Vector3D[] normals = this.normals;
+        if (normals == null) {
+            Vector3D[] vertices = getVertices();
+            Vector3D v = Vector3D.substract(vertices[1], vertices[0]);
+            Vector3D w = Vector3D.substract(vertices[2], vertices[0]);
+
+            normal = Vector3D.scalarMultiplication(Vector3D.normalize(Vector3D.crossProduct(v, w)), -1.0);
+        } else {
+        	for(int i = 0; i < normals.length; i++){
+                normal.setX(normal.getX() + normals[i].getX());
+                normal.setY(normal.getY() + normals[i].getY());
+                normal.setZ(normal.getZ() + normals[i].getZ());
+            }
+            normal.setX(normal.getX() / normals.length);
+            normal.setY(normal.getY() / normals.length);
+            normal.setZ(normal.getZ() / normals.length);
         }
         
         return normal;
@@ -94,10 +121,13 @@ public class Triangle {
 
         return t;
     }
-    
 
-    private void setNormal(Vector3D[] normals) {
+    public void setNormal(Vector3D[] normals) {
         this.normals = normals;
+    }
+    
+    public Vector3D[] getNormals() {
+    	return this.normals;
     }
 
 }

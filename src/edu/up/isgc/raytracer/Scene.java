@@ -2,11 +2,11 @@
  *  2019 - Universidad Panamericana 
  *  All Rights Reserved
  */
-package raytracer;
+package edu.up.isgc.raytracer;
 
-import raytracer.objects.Camera;
-import raytracer.objects.DirectionalLight;
-import raytracer.objects.Object3D;
+import edu.up.isgc.raytracer.lights.Light;
+import edu.up.isgc.raytracer.objects.Camera;
+import edu.up.isgc.raytracer.objects.Object3D;
 import java.util.ArrayList;
 
 /**
@@ -15,11 +15,12 @@ import java.util.ArrayList;
  */
 public class Scene {
     private Camera camera;
+    private ArrayList<Light> lights;
     private ArrayList<Object3D> objects;
-    private DirectionalLight light;
 
     public Scene(){
         setObjects(new ArrayList<Object3D>());
+        setLights(new ArrayList<Light>());
     }
     
     public void addObject(Object3D object){
@@ -33,6 +34,18 @@ public class Scene {
     public void setObjects(ArrayList<Object3D> objects) {
         this.objects = objects;
     }
+    
+    public void addLight(Light light){
+        getLights().add(light);
+    }
+    
+    public ArrayList<Light> getLights() {
+        return lights;
+    }
+
+    public void setLights(ArrayList<Light> lights) {
+        this.lights = lights;
+    }
 
     public Camera getCamera() {
         return camera;
@@ -41,13 +54,5 @@ public class Scene {
     public void setCamera(Camera camera) {
         this.camera = camera;
     }
-
-	public DirectionalLight getLight() {
-		return light;
-	}
-
-	public void setLight(DirectionalLight light) {
-		this.light = light;
-	}
     
 }
