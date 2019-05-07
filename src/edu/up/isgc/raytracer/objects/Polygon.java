@@ -7,6 +7,8 @@ package edu.up.isgc.raytracer.objects;
 import edu.up.isgc.raytracer.Intersection;
 import edu.up.isgc.raytracer.Ray;
 import edu.up.isgc.raytracer.Vector3D;
+import edu.up.isgc.raytracer.tools.Barycentric;
+
 import java.awt.Color;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -55,15 +57,18 @@ public class Polygon extends Object3D {
         Vector3D position = Vector3D.ZERO();
 
         for (Triangle triangle : getTriangles()) {
-            double intersection = triangle.getIntersection(ray);
+        	double intersection = triangle.getIntersection(ray);
 
             if (intersection > 0 && (intersection < distance || distance < 0)) {
-                distance = intersection;
+            	normal = Vector3D.ZERO();
+            	distance = intersection;
                 position = Vector3D.add(ray.getOrigin(), Vector3D.scalarMultiplication(ray.getDirection(), distance));
-                normal = triangle.getNormal();
+                double[] uVw = Barycentric.CalculateBarycentricCoordinates(position, triangle);
                 
-                //https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/shading-normals
-                
+                Vector3D[] normals = triangle.getNormals();
+                for(int i = 0; i < uVw.length; i++) {
+                	normal = Vector3D.add(normal, Vector3D.scalarMultiplication(normals[i], uVw[i]));
+                }
             }
         }
 
