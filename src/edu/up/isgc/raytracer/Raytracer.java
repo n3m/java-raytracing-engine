@@ -1,7 +1,4 @@
-/**
- *  2019 - Universidad Panamericana 
- *  All Rights Reserved
- */
+
 package edu.up.isgc.raytracer;
 
 import edu.up.isgc.raytracer.objects.Sphere;
@@ -22,6 +19,7 @@ import javax.imageio.ImageIO;
  *
  * @author Jafet
  */
+
 public class Raytracer {
 
 	/**
@@ -32,19 +30,19 @@ public class Raytracer {
 		System.out.println("AEMN -> Raytracer v" + version);
 		System.out.println(new Date());
 
-		Scene scene01 = new Scene();
-		scene01.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 8.2f, 50f));
-		scene01.addLight(new DirectionalLight(Vector3D.ZERO(), new Vector3D(0.0, 0.0, 1.0), Color.WHITE, 1.6));
+		Scene sceneRoot = new Scene();
+		sceneRoot.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 8.2f, 50f));
+		sceneRoot.addLight(new DirectionalLight(Vector3D.ZERO(), new Vector3D(0.0, 0.0, 1.0), Color.WHITE, 1.6));
 		
-		scene01.addObject(new Sphere(new Vector3D(0f, 1f, 5f), 0.5f, Color.RED));
-		scene01.addObject(new Sphere(new Vector3D(0.5f, 1f, 4.5f), 0.25f, new Color(200,255,0)));
-		scene01.addObject(new Sphere(new Vector3D(0.35f, 1f, 4.5f), 0.3f, Color.BLUE));
-		scene01.addObject(new Sphere(new Vector3D(4.85f, 1f, 4.5f), 0.3f, Color.PINK));
-		scene01.addObject(new Sphere(new Vector3D(2.85f, 1f, 304.5f), 0.5f, Color.BLUE));
-		scene01.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(0f, -2.5f, 1f), Color.WHITE));
-		scene01.addObject(OBJReader.GetPolygon("ring.obj", new Vector3D(2f, -1.0f, 1.5f), Color.blue));
+		sceneRoot.addObject(new Sphere(new Vector3D(0f, 1f, 5f), 0.5f, Color.RED));
+		sceneRoot.addObject(new Sphere(new Vector3D(0.5f, 1f, 4.5f), 0.25f, new Color(200,255,0)));
+		sceneRoot.addObject(new Sphere(new Vector3D(0.35f, 1f, 4.5f), 0.3f, Color.BLUE));
+		sceneRoot.addObject(new Sphere(new Vector3D(4.85f, 1f, 4.5f), 0.3f, Color.PINK));
+		sceneRoot.addObject(new Sphere(new Vector3D(2.85f, 1f, 304.5f), 0.5f, Color.BLUE));
+		sceneRoot.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(0f, -2.5f, 1f), Color.WHITE));
+		sceneRoot.addObject(OBJReader.GetPolygon("ring.obj", new Vector3D(2f, -1.0f, 1.5f), Color.blue));
 
-		BufferedImage image = raytrace(scene01);
+		BufferedImage image = raytrace(sceneRoot);
 		File outputImage = new File("image.png");
 		try {
 			ImageIO.write(image, "png", outputImage);
