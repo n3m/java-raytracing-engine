@@ -21,8 +21,6 @@ public class PointLight extends Object3D{
 		super(position, color);
 		// TODO Auto-generated constructor stub
 	}
-	
-	
 
 	@Override
 	public Intersection getIntersection(Ray ray) {
