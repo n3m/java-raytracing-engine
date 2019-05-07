@@ -81,14 +81,20 @@ public class OBJReader {
                         for (int i = 0; i < faceVertex.size(); i++) {
                             triangleVertices[i] = (vertices.get(faceVertex.get(i) - 1));
                         }
-                        //Vector3D[] verticesNormals = new Vector3D[]{normals.get(faceNormal.get(0) - 1)};
-                        //triangles.add(new Triangle(triangleVertices, verticesNormals));
+                        
+                                              
+                        Vector3D[] verticesNormals = new Vector3D[]{normals.get(faceNormal.get(0) - 1)};
+                        for (Vector3D vector3d : verticesNormals) {
+							System.out.println(vector3d.toString());
+						}
+                        
+                        triangles.add(new Triangle(triangleVertices, verticesNormals));
                         
                         if(groupDetected) {
                         	smoothGroups.get(currentGroup).add(new Triangle(triangleVertices[1], triangleVertices[0], triangleVertices[2]));
                         }
                         
-                        triangles.add(new Triangle(triangleVertices[1], triangleVertices[0], triangleVertices[2]));
+                        //triangles.add(new Triangle(triangleVertices[1], triangleVertices[0], triangleVertices[2]));
                         if (faceVertex.size() == 4) {
                             triangles.add(new Triangle(triangleVertices[2], triangleVertices[0], triangleVertices[3]));
                         }
