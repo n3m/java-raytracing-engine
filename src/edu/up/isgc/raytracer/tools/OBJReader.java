@@ -34,9 +34,17 @@ public class OBJReader {
             List<Vector3D> vertices = new ArrayList<Vector3D>();
             List<Vector3D> normals = new ArrayList<Vector3D>();
             HashMap<Integer, ArrayList<Triangle>> smoothGroups = new HashMap<Integer, ArrayList<Triangle>>();
-            
+            int currentGroup = 0;
+            boolean groupDetected = false;
             String line;
             while ((line = reader.readLine()) != null) {
+            	if(line.startsWith("s ")) {
+            		groupDetected = true;
+            		String[] val = line.split(" ");
+            		currentGroup = Integer.parseInt(val[1]);
+            		smoothGroups.put(Integer.parseInt(val[1]), new ArrayList<Triangle>());
+            	}
+            	
                 if (line.startsWith("v ") || line.startsWith("vn ")) {
                     String[] vertexComponents = line.split("(\\s)+");
                     if (vertexComponents.length >= 4) {
@@ -75,6 +83,11 @@ public class OBJReader {
                         }
                         //Vector3D[] verticesNormals = new Vector3D[]{normals.get(faceNormal.get(0) - 1)};
                         //triangles.add(new Triangle(triangleVertices, verticesNormals));
+                        
+                        if(groupDetected) {
+                        	smoothGroups.get(currentGroup).add(new Triangle(triangleVertices[1], triangleVertices[0], triangleVertices[2]));
+                        }
+                        
                         triangles.add(new Triangle(triangleVertices[1], triangleVertices[0], triangleVertices[2]));
                         if (faceVertex.size() == 4) {
                             triangles.add(new Triangle(triangleVertices[2], triangleVertices[0], triangleVertices[3]));
@@ -82,8 +95,9 @@ public class OBJReader {
                     }
                 }
             }
-            System.out.println("=");
             reader.close();
+            
+            
             return new Polygon(origin, triangles.toArray(new Triangle[triangles.size()]), color);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(OBJReader.class.getName()).log(Level.SEVERE, null, ex);

@@ -61,6 +61,9 @@ public class Polygon extends Object3D {
                 distance = intersection;
                 position = Vector3D.add(ray.getOrigin(), Vector3D.scalarMultiplication(ray.getDirection(), distance));
                 normal = triangle.getNormal();
+                
+                //https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/shading-normals
+                
             }
         }
 
