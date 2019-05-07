@@ -5,6 +5,7 @@ import edu.up.isgc.raytracer.objects.Sphere;
 import edu.up.isgc.raytracer.tools.OBJReader;
 import edu.up.isgc.raytracer.lights.DirectionalLight;
 import edu.up.isgc.raytracer.lights.Light;
+import edu.up.isgc.raytracer.lights.PointLight;
 import edu.up.isgc.raytracer.objects.Camera;
 import edu.up.isgc.raytracer.objects.Object3D;
 import java.awt.Color;
@@ -26,21 +27,27 @@ public class Raytracer {
 	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) {
-		float version = 0.5f;
+		float version = 0.7f;
 		System.out.println("AEMN -> Raytracer v" + version);
 		System.out.println(new Date());
 
 		Scene sceneRoot = new Scene();
 		sceneRoot.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 8.2f, 50f));
-		sceneRoot.addLight(new DirectionalLight(Vector3D.ZERO(), new Vector3D(0.0, 0.0, 1.0), Color.WHITE, 1.6));
+		//Directional Light
+		//sceneRoot.addLight(new DirectionalLight(Vector3D.ZERO(), new Vector3D(0.0, 0.0, 1.0), Color.WHITE, 1.6));
+		//Spot Light or Point Light
+		sceneRoot.addLight(new PointLight(new Vector3D(0f, 2f, -1.5f), Color.WHITE, 0.6));
 		
 		sceneRoot.addObject(new Sphere(new Vector3D(0f, 1f, 5f), 0.5f, Color.RED));
-		sceneRoot.addObject(new Sphere(new Vector3D(0.5f, 1f, 4.5f), 0.25f, new Color(200,255,0)));
-		sceneRoot.addObject(new Sphere(new Vector3D(0.35f, 1f, 4.5f), 0.3f, Color.BLUE));
-		sceneRoot.addObject(new Sphere(new Vector3D(4.85f, 1f, 4.5f), 0.3f, Color.PINK));
-		sceneRoot.addObject(new Sphere(new Vector3D(2.85f, 1f, 304.5f), 0.5f, Color.BLUE));
+		
+		sceneRoot.addObject(new Sphere(new Vector3D(-1f, -.8f, 3f), 0.5f, Color.RED));
+		sceneRoot.addObject(new Sphere(new Vector3D(-1.1f, -1.8f, 3f), 0.5f, Color.RED));
+		
 		sceneRoot.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(0f, -2.5f, 1f), Color.WHITE));
 		sceneRoot.addObject(OBJReader.GetPolygon("ring.obj", new Vector3D(2f, -1.0f, 1.5f), Color.blue));
+		sceneRoot.addObject(OBJReader.GetPolygon("ring.obj", new Vector3D(2f, 1f, 1.5f), Color.blue));
+		sceneRoot.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(-2f, 0f, 1.5f), Color.ORANGE));
+		sceneRoot.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(2f, 2f, 1.5f), Color.YELLOW));
 
 		BufferedImage image = raytrace(sceneRoot);
 		File outputImage = new File("image.png");
