@@ -7,6 +7,7 @@ package edu.up.isgc.raytracer.lights;
 import edu.up.isgc.raytracer.Intersection;
 import edu.up.isgc.raytracer.Vector3D;
 import edu.up.isgc.raytracer.lights.Light;
+
 import java.awt.Color;
 
 /**

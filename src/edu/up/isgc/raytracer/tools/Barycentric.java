@@ -27,7 +27,7 @@ public class Barycentric {
 		double denom = d00 * d11 - d01 * d01;
 	    v = (d11 * d20 - d01 * d21) / denom;
 	    w = (d00 * d21 - d01 * d20) / denom;
-	    u = 1.0 - v - w;
+	    u = 1.0f - v - w;
 	    
 	    return new double[] {u,v,w};
 	}
