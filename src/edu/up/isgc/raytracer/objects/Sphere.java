@@ -15,18 +15,18 @@ import java.awt.Color;
  */
 public class Sphere extends Object3D {
 
-    private float radius;
+    private double radius;
 
-    public Sphere(Vector3D center, float radius, Color color) {
+    public Sphere(Vector3D center, double radius, Color color) {
         super(center, color);
         setRadius(radius);
     }
 
-    public float getRadius() {
+    public double getRadius() {
         return radius;
     }
 
-    public void setRadius(float radius) {
+    public void setRadius(double radius) {
         this.radius = radius;
     }
 

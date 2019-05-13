@@ -1,4 +1,7 @@
-
+/**
+ *  2019 - Universidad Panamericana 
+ *  All Rights Reserved
+ */
 package edu.up.isgc.raytracer;
 
 import edu.up.isgc.raytracer.objects.Sphere;
@@ -20,36 +23,30 @@ import javax.imageio.ImageIO;
  *
  * @author Jafet
  */
-
 public class Raytracer {
 
 	/**
 	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) {
-		float version = 0.7f;
+		float version = 0.8f;
 		System.out.println("AEMN -> Raytracer v" + version);
 		System.out.println(new Date());
+		Scene scene01 = new Scene();
+		scene01.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 8.2f, 50f));
+		scene01.addLight(new PointLight(new Vector3D(1.0, 2.0, 0.0), Color.WHITE, 15));
+		scene01.addLight(new PointLight(new Vector3D(-4.0, 2.0, 2.0), Color.WHITE, 15));
+		scene01.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(-.5f, -2.2f, 1f), Color.PINK));
+		scene01.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0f, -2.5f, 1f), Color.GRAY));
+		/*
+		 * scene01.addLight(new PointLight(new Vector3D(0.0f, 3.0f, -1.0f), Color.WHITE,
+		 * 30)); scene01.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(0.0f,
+		 * -1.0f, 1.0f), Color.PINK));
+		 * scene01.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0.0f, -2.5f,
+		 * 1.0f), Color.LIGHT_GRAY));
+		 */
 
-		Scene sceneRoot = new Scene();
-		sceneRoot.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 8.2f, 50f));
-		//Directional Light
-		//sceneRoot.addLight(new DirectionalLight(Vector3D.ZERO(), new Vector3D(0.0, 0.0, 1.0), Color.WHITE, 1.6));
-		//Spot Light or Point Light
-		sceneRoot.addLight(new PointLight(new Vector3D(0f, 2f, -1.5f), Color.WHITE, 0.6));
-		
-		sceneRoot.addObject(new Sphere(new Vector3D(0f, 1f, 5f), 0.5f, Color.RED));
-		
-		sceneRoot.addObject(new Sphere(new Vector3D(-1f, -.8f, 3f), 0.5f, Color.RED));
-		sceneRoot.addObject(new Sphere(new Vector3D(-1.1f, -1.8f, 3f), 0.5f, Color.RED));
-		
-		sceneRoot.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(0f, -2.5f, 1f), Color.WHITE));
-		sceneRoot.addObject(OBJReader.GetPolygon("ring.obj", new Vector3D(2f, -1.0f, 1.5f), Color.blue));
-		sceneRoot.addObject(OBJReader.GetPolygon("ring.obj", new Vector3D(2f, 1f, 1.5f), Color.blue));
-		sceneRoot.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(-2f, 0f, 1.5f), Color.ORANGE));
-		sceneRoot.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(2f, 2f, 1.5f), Color.YELLOW));
-
-		BufferedImage image = raytrace(sceneRoot);
+		BufferedImage image = raytrace(scene01);
 		File outputImage = new File("image.png");
 		try {
 			ImageIO.write(image, "png", outputImage);
@@ -71,8 +68,9 @@ public class Raytracer {
 				if (intersection != null) {
 					double distance = intersection.getDistance();
 
-					if (distance >= 0 && (closestIntersection == null || distance < closestIntersection.getDistance()) && (clippingPlanes == null
-							|| (intersection.getPosition().getZ() >= clippingPlanes[0] && intersection.getPosition().getZ() <= clippingPlanes[1]))) {
+					if (distance >= 0 && (closestIntersection == null || distance < closestIntersection.getDistance())
+							&& (clippingPlanes == null || (intersection.getPosition().getZ() >= clippingPlanes[0]
+									&& intersection.getPosition().getZ() <= clippingPlanes[1]))) {
 						closestIntersection = intersection;
 					}
 				}
@@ -86,7 +84,8 @@ public class Raytracer {
 		Camera mainCamera = scene.getCamera();
 		ArrayList<Light> lights = scene.getLights();
 		float[] nearFarPlanes = mainCamera.getNearFarPlanes();
-		BufferedImage image = new BufferedImage(mainCamera.getResolution()[0], mainCamera.getResolution()[1], BufferedImage.TYPE_INT_RGB);
+		BufferedImage image = new BufferedImage(mainCamera.getResolution()[0], mainCamera.getResolution()[1],
+				BufferedImage.TYPE_INT_RGB);
 		ArrayList<Object3D> objects = scene.getObjects();
 
 		Vector3D[][] positionsToRaytrace = mainCamera.calculatePositionsToRay();
@@ -97,8 +96,9 @@ public class Raytracer {
 				double z = positionsToRaytrace[i][j].getZ() + mainCamera.getPosition().getZ();
 				Ray ray = new Ray(mainCamera.getPosition(), new Vector3D(x, y, z));
 
-				Intersection closestIntersection = raycast(ray, objects, null, new float[] {
-						(float) mainCamera.getPosition().getZ() + nearFarPlanes[0], (float) mainCamera.getPosition().getZ() + nearFarPlanes[1] });
+				Intersection closestIntersection = raycast(ray, objects, null,
+						new float[] { (float) mainCamera.getPosition().getZ() + nearFarPlanes[0],
+								(float) mainCamera.getPosition().getZ() + nearFarPlanes[1] });
 
 				// Background color
 				Color pixelColor = Color.BLACK;
@@ -107,6 +107,12 @@ public class Raytracer {
 					for (Light light : lights) {
 						float nDotL = light.getNDotL(closestIntersection);
 						float intensity = (float) light.getIntensity() * nDotL;
+						if (light instanceof PointLight) {
+							intensity /= Math.pow(
+									Vector3D.magnitude(
+											Vector3D.substract(closestIntersection.getPosition(), light.getPosition())),
+									2);
+						}
 						float[] colors = new float[] { closestIntersection.getObject().getColor().getRed() / 255.0f,
 								closestIntersection.getObject().getColor().getGreen() / 255.0f,
 								closestIntersection.getObject().getColor().getBlue() / 255.0f };
@@ -114,7 +120,14 @@ public class Raytracer {
 						colors[1] *= intensity * (light.getColor().getGreen() / 255.0f);
 						colors[2] *= intensity * (light.getColor().getBlue() / 255.0f);
 
-						Color diffuse = new Color(clamp(colors[0], 0, 1), clamp(colors[1], 0, 1), clamp(colors[2], 0, 1));
+						// Shadow
+						Ray shadowRay = new Ray(closestIntersection.getPosition(), light.getPosition());
+						Intersection shadowIntersection = raycast(shadowRay, objects, closestIntersection.getObject(),
+								null);
+						Color diffuse = Color.black;
+						if (shadowIntersection == null) {
+							diffuse = new Color(clamp(colors[0], 0, 1), clamp(colors[1], 0, 1), clamp(colors[2], 0, 1));
+						}
 						pixelColor = addColor(pixelColor, diffuse);
 					}
 
