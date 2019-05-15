@@ -4,6 +4,7 @@
  */
 package edu.up.isgc.raytracer.objects;
 
+import edu.up.isgc.material.MaterialShader;
 import edu.up.isgc.raytracer.Intersection;
 import edu.up.isgc.raytracer.Ray;
 import edu.up.isgc.raytracer.Vector3D;
@@ -25,8 +26,8 @@ public class Polygon extends Object3D {
 
     private List<Triangle> triangles;
 
-    public Polygon(Vector3D position, Triangle[] triangles, Color color) {
-        super(position, color);
+    public Polygon(Vector3D position, Triangle[] triangles, MaterialShader shader) {
+        super(position, shader);
         setTriangles(triangles);
     }
 

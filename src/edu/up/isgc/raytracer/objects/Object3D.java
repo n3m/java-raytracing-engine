@@ -4,6 +4,7 @@
  */
 package edu.up.isgc.raytracer.objects;
 
+import edu.up.isgc.material.MaterialShader;
 import edu.up.isgc.raytracer.Intersection;
 import edu.up.isgc.raytracer.Ray;
 import edu.up.isgc.raytracer.Vector3D;
@@ -15,11 +16,11 @@ import java.awt.Color;
  */
 public abstract class Object3D {  
     private Vector3D position;
-    private Color color;
+    private MaterialShader shader;
 
-    public Object3D(Vector3D position, Color color){
+    public Object3D(Vector3D position, MaterialShader shader){
         setPosition(position);
-        setColor(color);
+        setShader(shader);
     }
     
     public Vector3D getPosition() {
@@ -30,14 +31,15 @@ public abstract class Object3D {
         this.position = position;
     }
 
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
     
     public abstract Intersection getIntersection(Ray ray);
+
+	public MaterialShader getShader() {
+		return shader;
+	}
+
+	public void setShader(MaterialShader shader) {
+		this.shader = shader;
+	}
     
 }

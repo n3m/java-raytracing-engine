@@ -4,20 +4,21 @@
  */
 package edu.up.isgc.raytracer;
 
-import edu.up.isgc.raytracer.objects.Sphere;
-import edu.up.isgc.raytracer.tools.OBJReader;
-import edu.up.isgc.raytracer.lights.DirectionalLight;
-import edu.up.isgc.raytracer.lights.Light;
-import edu.up.isgc.raytracer.lights.PointLight;
-import edu.up.isgc.raytracer.objects.Camera;
-import edu.up.isgc.raytracer.objects.Object3D;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+
 import javax.imageio.ImageIO;
+
+import edu.up.isgc.material.MaterialShader;
+import edu.up.isgc.raytracer.lights.Light;
+import edu.up.isgc.raytracer.lights.PointLight;
+import edu.up.isgc.raytracer.objects.Camera;
+import edu.up.isgc.raytracer.objects.Object3D;
+import edu.up.isgc.raytracer.tools.OBJReader;
 
 /**
  *
@@ -34,17 +35,10 @@ public class Raytracer {
 		System.out.println(new Date());
 		Scene scene01 = new Scene();
 		scene01.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 8.2f, 50f));
-		scene01.addLight(new PointLight(new Vector3D(1.0, 2.0, 0.0), Color.WHITE, 15));
-		scene01.addLight(new PointLight(new Vector3D(-4.0, 2.0, 2.0), Color.WHITE, 15));
-		scene01.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(-.5f, -2.2f, 1f), Color.PINK));
-		scene01.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0f, -2.5f, 1f), Color.GRAY));
-		/*
-		 * scene01.addLight(new PointLight(new Vector3D(0.0f, 3.0f, -1.0f), Color.WHITE,
-		 * 30)); scene01.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(0.0f,
-		 * -1.0f, 1.0f), Color.PINK));
-		 * scene01.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0.0f, -2.5f,
-		 * 1.0f), Color.LIGHT_GRAY));
-		 */
+		scene01.addLight(new PointLight(new Vector3D(1.0, 1.0, 1.0), new MaterialShader(Color.WHITE, 15,  0, 0)));
+		scene01.addLight(new PointLight(new Vector3D(1.0, 1.0, -3.0), new MaterialShader(Color.WHITE, 15, 0, 0)));
+		scene01.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(-.5f, -2.2f, 2f), new MaterialShader(Color.PINK, 0, 0, 0)));
+		scene01.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0f, -2.5f, 1f), new MaterialShader(Color.GRAY, 0, 0, 0)));
 
 		BufferedImage image = raytrace(scene01);
 		File outputImage = new File("image.png");
@@ -106,19 +100,19 @@ public class Raytracer {
 					pixelColor = Color.BLACK;
 					for (Light light : lights) {
 						float nDotL = light.getNDotL(closestIntersection);
-						float intensity = (float) light.getIntensity() * nDotL;
+						float intensity = (float) light.getShader().getIntensity() * nDotL;
 						if (light instanceof PointLight) {
 							intensity /= Math.pow(
 									Vector3D.magnitude(
 											Vector3D.substract(closestIntersection.getPosition(), light.getPosition())),
 									2);
 						}
-						float[] colors = new float[] { closestIntersection.getObject().getColor().getRed() / 255.0f,
-								closestIntersection.getObject().getColor().getGreen() / 255.0f,
-								closestIntersection.getObject().getColor().getBlue() / 255.0f };
-						colors[0] *= intensity * (light.getColor().getRed() / 255.0f);
-						colors[1] *= intensity * (light.getColor().getGreen() / 255.0f);
-						colors[2] *= intensity * (light.getColor().getBlue() / 255.0f);
+						float[] colors = new float[] { closestIntersection.getObject().getShader().getColor().getRed() / 255.0f,
+								closestIntersection.getObject().getShader().getColor().getGreen() / 255.0f,
+								closestIntersection.getObject().getShader().getColor().getBlue() / 255.0f };
+						colors[0] *= intensity * (light.getShader().getColor().getRed() / 255.0f);
+						colors[1] *= intensity * (light.getShader().getColor().getGreen() / 255.0f);
+						colors[2] *= intensity * (light.getShader().getColor().getBlue() / 255.0f);
 
 						// Shadow
 						Ray shadowRay = new Ray(closestIntersection.getPosition(), light.getPosition());
