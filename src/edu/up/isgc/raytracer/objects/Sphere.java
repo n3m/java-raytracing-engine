@@ -4,6 +4,7 @@
  */
 package edu.up.isgc.raytracer.objects;
 
+import edu.up.isgc.material.MaterialShader;
 import edu.up.isgc.raytracer.Intersection;
 import edu.up.isgc.raytracer.Ray;
 import edu.up.isgc.raytracer.Vector3D;
@@ -15,18 +16,18 @@ import java.awt.Color;
  */
 public class Sphere extends Object3D {
 
-    private float radius;
+    private double radius;
 
-    public Sphere(Vector3D center, float radius, Color color) {
-        super(center, color);
+    public Sphere(Vector3D center, double radius, MaterialShader shader) {
+        super(center, shader);
         setRadius(radius);
     }
 
-    public float getRadius() {
+    public double getRadius() {
         return radius;
     }
 
-    public void setRadius(float radius) {
+    public void setRadius(double radius) {
         this.radius = radius;
     }
 
