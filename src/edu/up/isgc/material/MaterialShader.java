@@ -13,13 +13,13 @@ public class MaterialShader {
 	
 	private Color color;
 	private double diffuse;
-	private double instensity;
+	private double intensity;
 	private double shininess;
 	
 	public MaterialShader(Color color, double intensity, double shininess, double diffuse) {
 		setColor(color);
 		setDiffuse(diffuse);
-		setInstensity(intensity);
+		setIntensity(intensity);
 		setShininess(shininess);
 	}
 
@@ -39,12 +39,12 @@ public class MaterialShader {
 		this.diffuse = diffuse;
 	}
 
-	public double getInstensity() {
-		return instensity;
+	public double getIntensity() {
+		return intensity;
 	}
 
-	private void setInstensity(double instensity) {
-		this.instensity = instensity;
+	private void setIntensity(double instensity) {
+		this.intensity = instensity;
 	}
 
 	public double getShininess() {

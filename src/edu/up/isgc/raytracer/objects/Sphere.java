@@ -4,6 +4,7 @@
  */
 package edu.up.isgc.raytracer.objects;
 
+import edu.up.isgc.material.MaterialShader;
 import edu.up.isgc.raytracer.Intersection;
 import edu.up.isgc.raytracer.Ray;
 import edu.up.isgc.raytracer.Vector3D;
@@ -17,8 +18,8 @@ public class Sphere extends Object3D {
 
     private double radius;
 
-    public Sphere(Vector3D center, double radius, Color color) {
-        super(center, color);
+    public Sphere(Vector3D center, double radius, MaterialShader shader) {
+        super(center, shader);
         setRadius(radius);
     }
 

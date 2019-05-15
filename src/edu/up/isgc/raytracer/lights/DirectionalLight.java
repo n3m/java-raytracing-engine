@@ -4,6 +4,7 @@
  */
 package edu.up.isgc.raytracer.lights;
 
+import edu.up.isgc.material.MaterialShader;
 import edu.up.isgc.raytracer.Intersection;
 import edu.up.isgc.raytracer.Vector3D;
 import edu.up.isgc.raytracer.lights.Light;
@@ -17,8 +18,8 @@ import java.awt.Color;
 public class DirectionalLight extends Light {
     private Vector3D direction;
     
-    public DirectionalLight(Vector3D position, Vector3D direction, Color color, double intensity) {
-        super(position, color, intensity);
+    public DirectionalLight(Vector3D position, Vector3D direction, MaterialShader shader) {
+        super(position, shader);
         setDirection(Vector3D.normalize(direction));
     }
 

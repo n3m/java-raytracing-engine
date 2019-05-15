@@ -4,6 +4,7 @@
  */
 package edu.up.isgc.raytracer.tools;
 
+import edu.up.isgc.material.MaterialShader;
 import edu.up.isgc.raytracer.Vector3D;
 import edu.up.isgc.raytracer.objects.Polygon;
 import edu.up.isgc.raytracer.objects.Triangle;
@@ -28,7 +29,7 @@ public class OBJReader {
 	private OBJReader() {
 	}
 
-	public static Polygon GetPolygon(String path, Vector3D origin, Color color) {
+	public static Polygon GetPolygon(String path, Vector3D origin, MaterialShader shader) {
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(path));
 
@@ -157,7 +158,7 @@ public class OBJReader {
 				}
 			}
 
-			return new Polygon(origin, triangles.toArray(new Triangle[triangles.size()]), color);
+			return new Polygon(origin, triangles.toArray(new Triangle[triangles.size()]), shader);
 		} catch (FileNotFoundException ex) {
 			Logger.getLogger(OBJReader.class.getName()).log(Level.SEVERE, null, ex);
 		} catch (IOException ex) {
