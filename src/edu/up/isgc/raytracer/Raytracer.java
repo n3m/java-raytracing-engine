@@ -4,20 +4,20 @@
  */
 package edu.up.isgc.raytracer;
 
-import edu.up.isgc.raytracer.objects.Sphere;
-import edu.up.isgc.raytracer.tools.OBJReader;
-import edu.up.isgc.raytracer.lights.DirectionalLight;
-import edu.up.isgc.raytracer.lights.Light;
-import edu.up.isgc.raytracer.lights.PointLight;
-import edu.up.isgc.raytracer.objects.Camera;
-import edu.up.isgc.raytracer.objects.Object3D;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+
 import javax.imageio.ImageIO;
+
+import edu.up.isgc.raytracer.lights.Light;
+import edu.up.isgc.raytracer.lights.PointLight;
+import edu.up.isgc.raytracer.objects.Camera;
+import edu.up.isgc.raytracer.objects.Object3D;
+import edu.up.isgc.raytracer.tools.OBJReader;
 
 /**
  *
@@ -34,17 +34,10 @@ public class Raytracer {
 		System.out.println(new Date());
 		Scene scene01 = new Scene();
 		scene01.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 8.2f, 50f));
-		scene01.addLight(new PointLight(new Vector3D(1.0, 2.0, 0.0), Color.WHITE, 15));
-		scene01.addLight(new PointLight(new Vector3D(-4.0, 2.0, 2.0), Color.WHITE, 15));
-		scene01.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(-.5f, -2.2f, 1f), Color.PINK));
+		scene01.addLight(new PointLight(new Vector3D(1.0, 1.0, 1.0), Color.WHITE, 15));
+		scene01.addLight(new PointLight(new Vector3D(1.0, 1.0, -3.0), Color.WHITE, 15));
+		scene01.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(-.5f, -2.2f, 2f), Color.PINK));
 		scene01.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0f, -2.5f, 1f), Color.GRAY));
-		/*
-		 * scene01.addLight(new PointLight(new Vector3D(0.0f, 3.0f, -1.0f), Color.WHITE,
-		 * 30)); scene01.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(0.0f,
-		 * -1.0f, 1.0f), Color.PINK));
-		 * scene01.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0.0f, -2.5f,
-		 * 1.0f), Color.LIGHT_GRAY));
-		 */
 
 		BufferedImage image = raytrace(scene01);
 		File outputImage = new File("image.png");
