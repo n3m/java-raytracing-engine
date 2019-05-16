@@ -22,7 +22,7 @@ public class Camera extends Object3D {
 	private float defaultZ = 15f;
 	private int[] resolution;
 	private float[] nearFarPlanes = new float[2];
-	private static MaterialShader def = new MaterialShader(Color.black, 0, 0, 0);
+	private static MaterialShader def = new MaterialShader(Color.black, 0, 0, 0, 0);
 
 	public Camera(Vector3D position, float fieldOfViewHorizontal, float fieldOfViewVertical, int widthResolution, int heightResolution, float nearPlane, float farPlane){
 		super(position, def);
