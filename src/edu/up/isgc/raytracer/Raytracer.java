@@ -1,7 +1,3 @@
-/**
- *  2019 - Universidad Panamericana 
- *  All Rights Reserved
- */
 package edu.up.isgc.raytracer;
 
 import java.awt.Color;
@@ -28,6 +24,7 @@ import edu.up.isgc.raytracer.tools.OBJReader;
 public class Raytracer {
 
 	/**
+	 * Main Algorithm
 	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) {
@@ -35,17 +32,19 @@ public class Raytracer {
 		System.out.println("AEMN -> Raytracer v" + version);
 		System.out.println(new Date());
 		Scene sceneRoot = new Scene();
-		sceneRoot.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 1200, 1200, 2f, 50f));
-		sceneRoot.addLight(new PointLight(new Vector3D(2, 1.0, -2.0), new MaterialShader(Color.WHITE, 50, 0, 0)));
-		sceneRoot.addLight(new PointLight(new Vector3D(-3.0, 1.0, 0.0), new MaterialShader(Color.WHITE, 50, 0, 0)));
-		
-		sceneRoot.addObject(new Sphere(new Vector3D(-2f, 0f, 1f), 0.3, new MaterialShader(Color.RED, 0, 10, 0.3)));
-		sceneRoot.addObject(new Sphere(new Vector3D(0f, 0f, 1f), 0.3, new MaterialShader(Color.RED, 0, 15, 0.5)));
-		sceneRoot.addObject(new Sphere(new Vector3D(2f, 0f, 1f), 0.3, new MaterialShader(Color.RED, 0, 5, 0.3)));
-		sceneRoot.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(2f, -2.2f, 2f),new MaterialShader(Color.ORANGE, 0, 15, 0.5)));
-		sceneRoot.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(-2f, -2.2f, 2f),new MaterialShader(Color.BLUE, 0, 15, 0.5)));
+		sceneRoot.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 2f, 50f));
+		sceneRoot.addLight(new PointLight(new Vector3D(2, 1.0, -2.0), new MaterialShader(Color.WHITE, 50, 0, 0, 0)));
+		sceneRoot.addLight(new PointLight(new Vector3D(-3.0, 1.0, 0.0), new MaterialShader(Color.WHITE, 50, 0, 0, 0)));
+
+		sceneRoot.addObject(new Sphere(new Vector3D(-2f, 0f, 1f), 0.3, new MaterialShader(Color.RED, 0, 35, .5, 0)));
+		sceneRoot.addObject(new Sphere(new Vector3D(0f, 0f, 1f), 0.3, new MaterialShader(Color.RED, 0, 15, 1, 0)));
+		sceneRoot.addObject(new Sphere(new Vector3D(2f, 0f, 1f), 0.3, new MaterialShader(Color.RED, 0, 5, 0.5, 0)));
+		sceneRoot.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(2f, -2.2f, 2f),
+				new MaterialShader(Color.ORANGE, 0, 5, 1.5f, 0)));
+		/*sceneRoot.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(-2f, -2.2f, 2f),
+			new MaterialShader(Color.BLUE, 0, 15, 0.5)));*/
 		sceneRoot.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0f, -2.5f, 1f),
-				new MaterialShader(Color.GRAY, 0, 0, 1.0)));
+				new MaterialShader(Color.GRAY, 0, 0, 1.0, 0)));
 
 		BufferedImage image = raytrace(sceneRoot);
 		File outputImage = new File("image.png");
@@ -57,7 +56,15 @@ public class Raytracer {
 
 		System.out.println(new Date());
 	}
-
+	
+	/***
+	 * Intersection tracing method.
+	 * @param ray
+	 * @param objects
+	 * @param caster
+	 * @param clippingPlanes
+	 * @return
+	 */
 	public static Intersection raycast(Ray ray, ArrayList<Object3D> objects, Object3D caster, float[] clippingPlanes) {
 		Intersection closestIntersection = null;
 
@@ -80,7 +87,13 @@ public class Raytracer {
 
 		return closestIntersection;
 	}
-
+	
+	
+	/***
+	 * Scene raytracing method.
+	 * @param scene
+	 * @return
+	 */
 	public static BufferedImage raytrace(Scene scene) {
 		Camera mainCamera = scene.getCamera();
 		ArrayList<Light> lights = scene.getLights();
@@ -101,16 +114,19 @@ public class Raytracer {
 						new float[] { (float) mainCamera.getPosition().getZ() + nearFarPlanes[0],
 								(float) mainCamera.getPosition().getZ() + nearFarPlanes[1] });
 
-				// Background color
-				Color pixelColor = Color.BLACK;
+				Color pixelColor = Color.BLACK; // Background color
 				if (closestIntersection != null) {
 					pixelColor = Color.BLACK;
+					
 					for (Light light : lights) {
 						
+						/***
+						 * Blin-Phong Shading / Interpolation
+						 */
 						Vector3D L = Vector3D.substract(light.getPosition(), closestIntersection.getPosition());
 						Vector3D V = Vector3D.substract(mainCamera.getPosition(), closestIntersection.getPosition());
 						Vector3D H = Vector3D.normalize((Vector3D.add(L, V)));
-
+						
 						float nDotL = light.getNDotL(closestIntersection);
 						float intensity = (float) light.getShader().getIntensity() * nDotL;
 						if (light instanceof PointLight) {
@@ -119,34 +135,41 @@ public class Raytracer {
 											Vector3D.substract(closestIntersection.getPosition(), light.getPosition())),
 									2);
 						}
-						
+
 						float specular = 1f;
 						float smooth = (float) closestIntersection.getObject().getShader().getDiffuse();
-						float ambient = .1f;
-						
+						float ambient = .05f;
+
 						float[] colors = new float[] {
 								closestIntersection.getObject().getShader().getColor().getRed() / 255.0f,
 								closestIntersection.getObject().getShader().getColor().getGreen() / 255.0f,
 								closestIntersection.getObject().getShader().getColor().getBlue() / 255.0f };
-						
-						float[] newRGB = new float[] {0.0f, 0.0f, 0.0f};
-						
+
+						float[] newRGB = new float[] { 0.0f, 0.0f, 0.0f };
+
 						newRGB[0] += colors[0] *= ambient;
 						newRGB[1] += colors[1] *= ambient;
-						newRGB[2] += colors[2] *= ambient;				
-						
+						newRGB[2] += colors[2] *= ambient;
+
 						newRGB[0] += colors[0] *= intensity * (light.getShader().getColor().getRed() / 255.0f) * smooth;
-						newRGB[1] += colors[1] *= intensity * (light.getShader().getColor().getGreen() / 255.0f) * smooth;
-						newRGB[2] += colors[2] *= intensity * (light.getShader().getColor().getBlue() / 255.0f) * smooth;
-						
+						newRGB[1] += colors[1] *= intensity * (light.getShader().getColor().getGreen() / 255.0f)
+								* smooth;
+						newRGB[2] += colors[2] *= intensity * (light.getShader().getColor().getBlue() / 255.0f)
+								* smooth;
+
 						specular *= (float) Math.pow(Vector3D.dotProduct(closestIntersection.getNormal(), H),
 								closestIntersection.getObject().getShader().getShininess());
+
+						newRGB[0] += colors[0] *= intensity * (light.getShader().getColor().getRed() / 255.0f)
+								* specular;
+						newRGB[1] += colors[1] *= intensity * (light.getShader().getColor().getGreen() / 255.0f)
+								* specular;
+						newRGB[2] += colors[2] *= intensity * (light.getShader().getColor().getBlue() / 255.0f)
+								* specular;
 						
-						newRGB[0] += colors[0] *= intensity * (light.getShader().getColor().getRed() / 255.0f) * specular;
-						newRGB[1] += colors[1] *= intensity * (light.getShader().getColor().getGreen() / 255.0f) * specular;
-						newRGB[2] += colors[2] *= intensity * (light.getShader().getColor().getBlue() / 255.0f) * specular;
-						
-						// Shadow
+						/***
+						 * Shadow algorithm
+						 */
 						Ray shadowRay = new Ray(closestIntersection.getPosition(), light.getPosition());
 						Intersection shadowIntersection = raycast(shadowRay, objects, closestIntersection.getObject(),
 								null);

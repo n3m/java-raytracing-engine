@@ -15,12 +15,14 @@ public class MaterialShader {
 	private double diffuse;
 	private double intensity;
 	private double shininess;
+	private double refractionIndex;
 	
-	public MaterialShader(Color color, double intensity, double shininess, double diffuse) {
+	public MaterialShader(Color color, double intensity, double shininess, double diffuse, double refraction) {
 		setColor(color);
 		setDiffuse(diffuse);
 		setIntensity(intensity);
 		setShininess(shininess);
+		setRefractionIndex(refraction);
 	}
 
 	public Color getColor() {
@@ -53,6 +55,14 @@ public class MaterialShader {
 
 	private void setShininess(double shininess) {
 		this.shininess = shininess;
+	}
+
+	public double getRefractionIndex() {
+		return refractionIndex;
+	}
+
+	public void setRefractionIndex(double refractionIndex) {
+		this.refractionIndex = refractionIndex;
 	}
 	
 	
