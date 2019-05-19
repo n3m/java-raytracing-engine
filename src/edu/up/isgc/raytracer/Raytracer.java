@@ -178,6 +178,23 @@ public class Raytracer {
 						if (shadowIntersection == null) {
 							diffuse = new Color(clamp(newRGB[0], 0, 1), clamp(newRGB[1], 0, 1), clamp(newRGB[2], 0, 1));
 						}
+						
+						/***
+						 * Reflection and Refraction
+						 */
+						
+						Vector3D u = Vector3D.substract(closestIntersection.getObject().getPosition(), closestIntersection.getNormal());
+						Vector3D v = Vector3D.substract(light.getPosition(), closestIntersection.getPosition());
+						float LU = (float) Math.sqrt( Math.pow(u.getX(), 2) + Math.pow(u.getY(), 2) + Math.pow(u.getZ(), 2) );
+						float LV = (float) Math.sqrt( Math.pow(v.getX(), 2) + Math.pow(v.getY(), 2) + Math.pow(v.getZ(), 2) );
+						
+						float angle = (float) Math.acos( Math.toRadians( Vector3D.dotProduct(u, v) / (LU * LV) ) );
+						Vector3D reflectedVector = Vector3D.ZERO();
+						
+						Ray reflectionRay = new Ray(closestIntersection.getPosition(), reflectedVector);
+						Intersection reflectedIntersection = raycast(reflectionRay, objects, closestIntersection.getObject(),
+								null);
+						
 						pixelColor = addColor(pixelColor, diffuse);
 					}
 
