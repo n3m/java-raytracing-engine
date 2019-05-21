@@ -32,7 +32,7 @@ public class Raytracer {
 	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) {
-		float version = 1.0f;
+		float version = 1.1f;
 		System.out.println("AEMN -> Raytracer v" + version);
 		System.out.println(new Date());
 
@@ -55,7 +55,7 @@ public class Raytracer {
 		sceneRoot.addObject(new Sphere(new Vector3D(2.0, -2.0, 1.5), 0.3, new ReflectiveMat(Color.WHITE, 0, 50, 0.5f)));
 
 		sceneRoot.addObject(
-				new Sphere(new Vector3D(0.3, -.8, -3), 0.6, new RefractiveMat(Color.WHITE, 0, 75, 0.2f, 1.5)));
+				new Sphere(new Vector3D(0.3, -1.5, 1), 0.6, new RefractiveMat(Color.WHITE, 0, 85, 0.1f, 1.5)));
 		/****************** SCENE FINISH ****************/
 
 		BufferedImage image = raytrace(sceneRoot);
@@ -278,7 +278,7 @@ public class Raytracer {
 		Vector3D intersectionNewPos = Vector3D.ZERO();
 		double IndexOfRefraction = ((RefractiveMat) closestIntersection.getObject().getShader()).getRefractionIndex();
 		if (closestIntersection.getObject() instanceof Sphere) {
-			double b = 1.3;
+			double b = 1.5;
 			Vector3D bias = Vector3D.scalarMultiplication(N, b);
 			double fresnel = Math.pow((IndexOfRefraction - 1), 2) / Math.pow((IndexOfRefraction + 1), 2);
 			if(fresnel > 0) {
