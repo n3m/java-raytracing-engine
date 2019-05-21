@@ -4,9 +4,6 @@ package edu.up.isgc.raytracer.lights;
 import edu.up.isgc.material.MaterialShader;
 import edu.up.isgc.raytracer.Intersection;
 import edu.up.isgc.raytracer.Vector3D;
-import edu.up.isgc.raytracer.lights.Light;
-
-import java.awt.Color;
 
 /**
  *
@@ -43,7 +40,7 @@ public class DirectionalLight extends Light {
     }
     
     /***
-     * Get the dot Product between the Intersection Normal, and it's direction.
+     * Get the Light nDotL
      */
     public float getNDotL(Intersection intersection){
     	return (float) Math.max(Vector3D.dotProduct(intersection.getNormal(), Vector3D.scalarMultiplication(getDirection(), -1.0)), 0.0);

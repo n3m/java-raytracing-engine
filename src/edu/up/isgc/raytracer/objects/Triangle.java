@@ -1,7 +1,3 @@
-/**
- *  2019 - Universidad Panamericana 
- *  All Rights Reserved
- */
 package edu.up.isgc.raytracer.objects;
 
 import edu.up.isgc.raytracer.Ray;
@@ -9,7 +5,7 @@ import edu.up.isgc.raytracer.Vector3D;
 
 /**
  *
- * @author Jafet
+ * @author Alan Maldonado
  */
 public class Triangle {
 
@@ -18,11 +14,21 @@ public class Triangle {
     private Vector3D[] vertices;
     private Vector3D[] normals;
 
+    /***
+     * 
+     * @param vertex1
+     * @param vertex2
+     * @param vertex3
+     */
     public Triangle(Vector3D vertex1, Vector3D vertex2, Vector3D vertex3) {
         setVertices(vertex1, vertex2, vertex3);
         setNormal(null);
     }
 
+    /***
+     * 
+     * @param vertices
+     */
     public Triangle(Vector3D[] vertices) {
         if (vertices.length == 3) {
             setVertices(vertices[0], vertices[1], vertices[2]);
@@ -32,20 +38,40 @@ public class Triangle {
         setNormal(null);
     }
 
+    /***
+     * 
+     * @param vertices
+     * @param normal
+     */
     public Triangle(Vector3D[] vertices, Vector3D[] normal) {
         this(vertices);
         setNormal(normal);
     }
 
+    /***
+     * Get Vertices Array
+     * @return
+     */
     public Vector3D[] getVertices() {
         return vertices;
     }
 
+    /***
+     * Set the vertices array
+     * @param vertex1
+     * @param vertex2
+     * @param vertex3
+     */
     public void setVertices(Vector3D vertex1, Vector3D vertex2, Vector3D vertex3) {
         Vector3D[] vertices = new Vector3D[]{vertex1, vertex2, vertex3};
         this.vertices = vertices;
     }
     
+    /***
+     * Get Triangle Normal from a point
+     * @param point
+     * @return
+     */
     public Vector3D getNormal(Vector3D point) {
         Vector3D normal = Vector3D.ZERO();
         
@@ -70,6 +96,10 @@ public class Triangle {
         return normal;
     }
     
+    /***
+     * Get triangle normal
+     * @return
+     */
     public Vector3D getNormal() {
         Vector3D normal = Vector3D.ZERO();
         
@@ -94,15 +124,17 @@ public class Triangle {
         return normal;
     }
 
+    /***
+     * Get Triangle intersection
+     * @param ray
+     * @return
+     */
     public double getIntersection(Ray ray) {
-        //Moller-Trumbore algorithm
         Vector3D[] vertices = getVertices();
         Vector3D v2v0 = Vector3D.substract(vertices[2], vertices[0]);
         Vector3D v1v0 = Vector3D.substract(vertices[1], vertices[0]);
         Vector3D vectorP = Vector3D.crossProduct(ray.getDirection(), v1v0);
         double determinant = Vector3D.dotProduct(v2v0, vectorP);
-        //if (determinant < EPSILON) return -1; 
-
         double invertedDeterminant = 1.0 / determinant;
 
         Vector3D vectorT = Vector3D.substract(ray.getOrigin(), vertices[0]);
@@ -122,10 +154,18 @@ public class Triangle {
         return t;
     }
 
+    /***
+     * Set triangle normal
+     * @param normals
+     */
     public void setNormal(Vector3D[] normals) {
         this.normals = normals;
     }
     
+    /***
+     * Get triangle normals
+     * @return
+     */
     public Vector3D[] getNormals() {
     	return this.normals;
     }

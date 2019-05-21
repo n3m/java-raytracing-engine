@@ -1,8 +1,10 @@
-/**
- *  2019 - Universidad Panamericana 
- *  All Rights Reserved
- */
+
 package edu.up.isgc.raytracer.objects;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import edu.up.isgc.material.MaterialShader;
 import edu.up.isgc.raytracer.Intersection;
@@ -10,15 +12,9 @@ import edu.up.isgc.raytracer.Ray;
 import edu.up.isgc.raytracer.Vector3D;
 import edu.up.isgc.raytracer.tools.Barycentric;
 
-import java.awt.Color;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 /**
  *
- * @author Jafet
+ * @author Alan Maldonado
  */
 public class Polygon extends Object3D {
 
@@ -26,15 +22,29 @@ public class Polygon extends Object3D {
 
     private List<Triangle> triangles;
 
+    /***
+     * 
+     * @param position
+     * @param triangles
+     * @param shader
+     */
     public Polygon(Vector3D position, Triangle[] triangles, MaterialShader shader) {
         super(position, shader);
         setTriangles(triangles);
     }
 
+    /***
+     * Get all triangles in a polygon
+     * @return
+     */
     public List<Triangle> getTriangles() {
         return triangles;
     }
 
+    /***
+     * Set all the triangles in a Polygon
+     * @param triangles
+     */
     public void setTriangles(Triangle[] triangles) {
         Vector3D position = getPosition();
         Set<Vector3D> uniqueVertices = new HashSet<Vector3D>();
@@ -52,6 +62,9 @@ public class Polygon extends Object3D {
         this.triangles = Arrays.asList(triangles);
     }
 
+    /***
+     * Get each triangle intersecton
+     */
     public Intersection getIntersection(Ray ray) {
         double distance = -1;
         Vector3D normal = Vector3D.ZERO();

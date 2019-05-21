@@ -1,7 +1,3 @@
-/**
- *  2019 - Universidad Panamericana 
- *  All Rights Reserved
- */
 package edu.up.isgc.raytracer.tools;
 
 import edu.up.isgc.material.MaterialShader;
@@ -22,13 +18,23 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Jafet
+ * @author Alan Maldonado
  */
 public class OBJReader {
 
+	/***
+	 * 
+	 */
 	private OBJReader() {
 	}
 
+	/***
+	 * Class Method that creates a polygon from a file
+	 * @param path
+	 * @param origin
+	 * @param shader
+	 * @return
+	 */
 	public static Polygon GetPolygon(String path, Vector3D origin, MaterialShader shader) {
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(path));

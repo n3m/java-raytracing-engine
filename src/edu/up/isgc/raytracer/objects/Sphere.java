@@ -1,36 +1,49 @@
-/**
- *  2019 - Universidad Panamericana 
- *  All Rights Reserved
- */
+
 package edu.up.isgc.raytracer.objects;
 
 import edu.up.isgc.material.MaterialShader;
 import edu.up.isgc.raytracer.Intersection;
 import edu.up.isgc.raytracer.Ray;
 import edu.up.isgc.raytracer.Vector3D;
-import java.awt.Color;
 
 /**
  *
- * @author Jafet
+ * @author Alan Maldonado
  */
 public class Sphere extends Object3D {
 
     private double radius;
 
+    /***
+     * 
+     * @param center
+     * @param radius
+     * @param shader
+     */
     public Sphere(Vector3D center, double radius, MaterialShader shader) {
         super(center, shader);
         setRadius(radius);
     }
 
+    /***
+     * Get Sphere radius
+     * @return
+     */
     public double getRadius() {
         return radius;
     }
 
+    /***
+     * Set sphere radius
+     * @param radius
+     */
     public void setRadius(double radius) {
         this.radius = radius;
     }
 
+    /***
+     * Get Sphere intersection
+     */
     public Intersection getIntersection(Ray ray) {
         double distance = -1;
         Vector3D normal = Vector3D.ZERO();
