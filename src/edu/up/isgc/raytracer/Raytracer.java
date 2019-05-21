@@ -22,7 +22,7 @@ import edu.up.isgc.raytracer.tools.OBJReader;
 
 /**
  *
- * @author Alan
+ * @author Alan Maldonado
  */
 public class Raytracer {
 
@@ -41,29 +41,23 @@ public class Raytracer {
 		/**************** Scene ****************/
 		// Scene Configuration
 		sceneRoot.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 0f, 50f));
-		sceneRoot.addLight(new PointLight(new Vector3D(-3, 2.0, 0), new LambertMat(Color.WHITE, 500, 0, 0, 0)));
+		sceneRoot.addLight(new PointLight(new Vector3D(-3, 2.0, 0), new LambertMat(Color.WHITE, 500, 0, 0)));
 		// Scene OBJs
 
 		sceneRoot.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(0, -2.5, 1.5),
-				new LambertMat(Color.ORANGE, 0, 5, 0.1f, 0)));
+				new LambertMat(Color.ORANGE, 0, 5, 0.1f)));
 
 		sceneRoot.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 1.5),
-				new ReflectiveMat(Color.WHITE, 0, 5, 0.1f, 0)));
+				new ReflectiveMat(Color.WHITE, 0, 5, 0.1f)));
 		// Scene Objects
 		sceneRoot.addObject(
-				new Sphere(new Vector3D(-2.0, -2.0, 1.5), 0.5, new ReflectiveMat(Color.PINK, 0, 15, 0.5f, 0)));
+				new Sphere(new Vector3D(-2.0, -2.0, 1.5), 0.5, new ReflectiveMat(Color.PINK, 0, 15, 0.5f)));
 		sceneRoot.addObject(
-				new Sphere(new Vector3D(2.0, -2.0, 1.5), 0.3, new ReflectiveMat(Color.WHITE, 0, 50, 0.5f, 0)));
+				new Sphere(new Vector3D(2.0, -2.0, 1.5), 0.3, new ReflectiveMat(Color.WHITE, 0, 50, 0.5f)));
 
 		sceneRoot.addObject(
 				new Sphere(new Vector3D(0.3, -.8, -3), 0.4, new RefractiveMat(Color.WHITE, 0, 5, 0.5f, 1.5)));
 
-		// Testing DELETE
-
-		/*
-		 * sceneRoot.addObject( new Sphere(new Vector3D(0.0, -1.0, 0.5), 0.5, new
-		 * ReflectiveMat(Color.ORANGE, 0, 15, 0.5f, 0)));
-		 */
 		/****************** SCENE FINISH ****************/
 
 		BufferedImage image = raytrace(sceneRoot);
@@ -205,6 +199,14 @@ public class Raytracer {
 		return image;
 	}
 
+	/***
+	 * Reflection Method
+	 * @param closestIntersection
+	 * @param light
+	 * @param objects
+	 * @param mainCamera
+	 * @return
+	 */
 	public static Intersection reflection(Intersection closestIntersection, Light light, ArrayList<Object3D> objects,
 			Camera mainCamera) {
 		Vector3D N = closestIntersection.getNormal();
@@ -220,10 +222,18 @@ public class Raytracer {
 		return reflectedIntersection;
 	}
 
+	/***
+	 * Refraction Method
+	 * @param closestIntersection
+	 * @param light
+	 * @param objects
+	 * @param mainCamera
+	 * @return
+	 */
 	public static Intersection refraction(Intersection closestIntersection, Light light, ArrayList<Object3D> objects,
 			Camera mainCamera) {
 		Intersection finalIntersection = null;
-		double ior = closestIntersection.getObject().getShader().getRefractionIndex();
+		double ior = ((RefractiveMat) closestIntersection.getObject().getShader()).getRefractionIndex();
 		Vector3D I = Vector3D.substract(closestIntersection.getPosition(), mainCamera.getPosition());
 		Vector3D N = closestIntersection.getNormal();
 		double IdotN = Vector3D.dotProduct(I, N);

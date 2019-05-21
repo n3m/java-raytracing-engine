@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.up.isgc.raytracer.objects;
 
 import edu.up.isgc.material.LambertMat;
@@ -14,7 +9,7 @@ import java.awt.Color;
 
 /**
  *
- * @author Jafet
+ * @author Alan Maldonado
  */
 public class Camera extends Object3D {
 	// 0 is fovh
@@ -23,7 +18,7 @@ public class Camera extends Object3D {
 	private float defaultZ = 15f;
 	private int[] resolution;
 	private float[] nearFarPlanes = new float[2];
-	private static MaterialShader def = new LambertMat(Color.black, 0, 0, 0, 0);
+	private static MaterialShader def = new LambertMat(Color.black, 0, 0, 0);
 
 	public Camera(Vector3D position, float fieldOfViewHorizontal, float fieldOfViewVertical, int widthResolution, int heightResolution, float nearPlane, float farPlane){
 		super(position, def);
