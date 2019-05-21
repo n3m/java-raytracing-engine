@@ -43,10 +43,10 @@ public class Raytracer {
 		sceneRoot.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 0f, 50f));
 		sceneRoot.addLight(new PointLight(new Vector3D(-3, 2.0, 0), new LambertMat(Color.WHITE, 500, 0, 0, 0)));
 		// Scene OBJs
-		/*
-		 * sceneRoot.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(0,
-		 * -2.5, 1.5), new LambertMat(Color.ORANGE, 0, 5, 0.1f, 0)));
-		 */
+
+		sceneRoot.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(0, -2.5, 1.5),
+				new LambertMat(Color.ORANGE, 0, 5, 0.1f, 0)));
+
 		sceneRoot.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 1.5),
 				new ReflectiveMat(Color.WHITE, 0, 5, 0.1f, 0)));
 		// Scene Objects
@@ -55,11 +55,15 @@ public class Raytracer {
 		sceneRoot.addObject(
 				new Sphere(new Vector3D(2.0, -2.0, 1.5), 0.3, new ReflectiveMat(Color.WHITE, 0, 50, 0.5f, 0)));
 
-		// Testing DELETE
-		sceneRoot.addObject(new Sphere(new Vector3D(0.0, -1, 0), 0.4, new RefractiveMat(Color.CYAN, 0, 5, 0.5f, 1.5)));
 		sceneRoot.addObject(
-				new Sphere(new Vector3D(0.0, -1.0, 0.5), 0.5, new ReflectiveMat(Color.ORANGE, 0, 15, 0.5f, 0)));
+				new Sphere(new Vector3D(0.3, -.8, -3), 0.4, new RefractiveMat(Color.WHITE, 0, 5, 0.5f, 1.5)));
 
+		// Testing DELETE
+
+		/*
+		 * sceneRoot.addObject( new Sphere(new Vector3D(0.0, -1.0, 0.5), 0.5, new
+		 * ReflectiveMat(Color.ORANGE, 0, 15, 0.5f, 0)));
+		 */
 		/****************** SCENE FINISH ****************/
 
 		BufferedImage image = raytrace(sceneRoot);
@@ -167,13 +171,15 @@ public class Raytracer {
 						} else if (closestIntersection.getObject().getShader() instanceof RefractiveMat) {
 							Intersection refractedIntersection = refraction(closestIntersection, light, objects,
 									mainCamera);
-							
-								newRGB = MaterialShader.calculateNewColors(light, refractedIntersection, mainCamera, ambient,
-										specular, smooth);
+							if (refractedIntersection != null) {
+								newRGB = MaterialShader.calculateNewColors(light, refractedIntersection, mainCamera,
+										ambient, specular, smooth);
+							}
 
-								Color newCol = new Color(clamp(newRGB[0], 0, 1), clamp(newRGB[1], 0, 1),
-										clamp(newRGB[2], 0, 1));
-								pixelColor = addColor(pixelColor, newCol);
+							Color newCol = new Color(clamp(newRGB[0], 0, 1), clamp(newRGB[1], 0, 1),
+									clamp(newRGB[2], 0, 1));
+							pixelColor = addColor(pixelColor, newCol);
+
 						}
 
 						/***
@@ -222,22 +228,25 @@ public class Raytracer {
 		Vector3D N = closestIntersection.getNormal();
 		double IdotN = Vector3D.dotProduct(I, N);
 		Vector3D T = null;
-/*
-		if (IdotN > 0) {
-			double angle = Math.acos(Math.toRadians(IdotN / (Vector3D.magnitude(I) * Vector3D.magnitude(N))));
 
-			double c1 = Vector3D.dotProduct(N, I);
-			double c2 = Math.sqrt(1 - Math.pow(n, 2) * (1 - Math.pow(Math.cos(angle), 2)));
-			T = Vector3D.add(Vector3D.scalarMultiplication(I, n), Vector3D.scalarMultiplication(N, (n * c1 - c2)));
+		double cosi = clamp(-1.0f, 1.0f, (float) IdotN);
+		double etai = 1, etat = ior;
+		Vector3D n = N;
+		if (cosi < 0) {
+			cosi = -cosi;
 		} else {
-			IdotN = -IdotN;
-			double angle = Math.acos(Math.toRadians(IdotN / (Vector3D.magnitude(I) * Vector3D.magnitude(N))));
-
-			double c1 = Vector3D.dotProduct(N, I);
-			double c2 = Math.sqrt(1 - Math.pow(n, 2) * (1 - Math.pow(Math.cos(angle), 2)));
-			T = Vector3D.substract(
-					Vector3D.scalarMultiplication(Vector3D.add(I, Vector3D.scalarMultiplication(N, c1)), n),
-					Vector3D.scalarMultiplication(N, c2));
+			double temp = etai;
+			etai = etat;
+			etat = temp;
+			n = Vector3D.scalarMultiplication(N, -1.0);
+		}
+		double eta = etai / etat;
+		double k = 1 - (eta * eta) * (1 - (cosi * cosi));
+		if (k <= 0) {
+			T = Vector3D.ZERO();
+		} else {
+			T = Vector3D.add(Vector3D.scalarMultiplication(I, eta),
+					Vector3D.scalarMultiplication(n, ((eta * cosi) - Math.sqrt(k))));
 		}
 
 		Vector3D refractedVector = T;
@@ -245,38 +254,6 @@ public class Raytracer {
 		Ray refractedRay = new Ray(closestIntersection.getPosition(), refractedVector);
 		Intersection refractedIntersection = raycast(refractedRay, objects, closestIntersection.getObject(), null);
 		finalIntersection = refractedIntersection;
-		if (refractedIntersection != null) {
-			if (refractedIntersection.getObject() == closestIntersection.getObject()) {
-				Intersection thirdIntersection = refraction(refractedIntersection, light, objects, mainCamera);
-				finalIntersection = thirdIntersection;
-			}
-		}*/
-		
-		 	double cosi = clamp(-1.0f, 1.0f, (float) IdotN);
-	        double etai = 1, etat = ior;
-	        Vector3D n = N;
-	        if (cosi < 0) {
-	            cosi = -cosi;
-	        } else {
-	            double temp = etai;
-	            etai = etat;
-	            etat = temp;
-	            n = Vector3D.scalarMultiplication(N, -1.0);
-	        }
-	        double eta = etai / etat;
-	        double k = 1 - (eta * eta) * (1 - (cosi * cosi));
-	        if (k <= 0) {
-	            T = Vector3D.ZERO();
-	        } else {
-	            T = Vector3D.add(Vector3D.scalarMultiplication(I, eta), Vector3D.scalarMultiplication(n, ((eta * cosi) - Math.sqrt(k))));
-	        }
-	        
-	        Vector3D refractedVector = T;
-
-			Ray refractedRay = new Ray(closestIntersection.getPosition(), refractedVector);
-			Intersection refractedIntersection = raycast(refractedRay, objects, closestIntersection.getObject(), null);
-			finalIntersection = refractedIntersection;
-		
 
 		return finalIntersection;
 	}
