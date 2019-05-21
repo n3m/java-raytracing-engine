@@ -9,7 +9,10 @@ import java.util.Date;
 
 import javax.imageio.ImageIO;
 
+import edu.up.isgc.material.LambertMat;
 import edu.up.isgc.material.MaterialShader;
+import edu.up.isgc.material.ReflectiveMat;
+import edu.up.isgc.material.RefractiveMat;
 import edu.up.isgc.raytracer.lights.Light;
 import edu.up.isgc.raytracer.lights.PointLight;
 import edu.up.isgc.raytracer.objects.Camera;
@@ -25,26 +28,43 @@ public class Raytracer {
 
 	/**
 	 * Main Algorithm
+	 * 
 	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) {
-		float version = 0.9f;
+		float version = 1.0f;
 		System.out.println("AEMN -> Raytracer v" + version);
 		System.out.println(new Date());
-		Scene sceneRoot = new Scene();
-		sceneRoot.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 2f, 50f));
-		sceneRoot.addLight(new PointLight(new Vector3D(2, 1.0, -2.0), new MaterialShader(Color.WHITE, 50, 0, 0, 0)));
-		sceneRoot.addLight(new PointLight(new Vector3D(-3.0, 1.0, 0.0), new MaterialShader(Color.WHITE, 50, 0, 0, 0)));
 
-		sceneRoot.addObject(new Sphere(new Vector3D(-2f, 0f, 1f), 0.3, new MaterialShader(Color.RED, 0, 35, .5, 0)));
-		sceneRoot.addObject(new Sphere(new Vector3D(0f, 0f, 1f), 0.3, new MaterialShader(Color.RED, 0, 15, 1, 0)));
-		sceneRoot.addObject(new Sphere(new Vector3D(2f, 0f, 1f), 0.3, new MaterialShader(Color.RED, 0, 5, 0.5, 0)));
-		sceneRoot.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(2f, -2.2f, 2f),
-				new MaterialShader(Color.ORANGE, 0, 5, 1.5f, 0)));
-		/*sceneRoot.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(-2f, -2.2f, 2f),
-			new MaterialShader(Color.BLUE, 0, 15, 0.5)));*/
-		sceneRoot.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0f, -2.5f, 1f),
-				new MaterialShader(Color.GRAY, 0, 0, 1.0, 0)));
+		Scene sceneRoot = new Scene();
+
+		/**************** Scene ****************/
+		// Scene Configuration
+		sceneRoot.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 0f, 50f));
+		sceneRoot.addLight(new PointLight(new Vector3D(-3, 2.0, 0), new LambertMat(Color.WHITE, 500, 0, 0, 0)));
+		// Scene OBJs
+
+		sceneRoot.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(0, -2.5, 1.5),
+				new LambertMat(Color.ORANGE, 0, 5, 0.1f, 0)));
+
+		sceneRoot.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 1.5),
+				new ReflectiveMat(Color.WHITE, 0, 5, 0.1f, 0)));
+		// Scene Objects
+		sceneRoot.addObject(
+				new Sphere(new Vector3D(-2.0, -2.0, 1.5), 0.5, new ReflectiveMat(Color.PINK, 0, 15, 0.5f, 0)));
+		sceneRoot.addObject(
+				new Sphere(new Vector3D(2.0, -2.0, 1.5), 0.3, new ReflectiveMat(Color.WHITE, 0, 50, 0.5f, 0)));
+
+		sceneRoot.addObject(
+				new Sphere(new Vector3D(0.3, -.8, -3), 0.4, new RefractiveMat(Color.WHITE, 0, 5, 0.5f, 1.5)));
+
+		// Testing DELETE
+
+		/*
+		 * sceneRoot.addObject( new Sphere(new Vector3D(0.0, -1.0, 0.5), 0.5, new
+		 * ReflectiveMat(Color.ORANGE, 0, 15, 0.5f, 0)));
+		 */
+		/****************** SCENE FINISH ****************/
 
 		BufferedImage image = raytrace(sceneRoot);
 		File outputImage = new File("image.png");
@@ -56,9 +76,10 @@ public class Raytracer {
 
 		System.out.println(new Date());
 	}
-	
+
 	/***
 	 * Intersection tracing method.
+	 * 
 	 * @param ray
 	 * @param objects
 	 * @param caster
@@ -87,10 +108,10 @@ public class Raytracer {
 
 		return closestIntersection;
 	}
-	
-	
+
 	/***
 	 * Scene raytracing method.
+	 * 
 	 * @param scene
 	 * @return
 	 */
@@ -117,56 +138,50 @@ public class Raytracer {
 				Color pixelColor = Color.BLACK; // Background color
 				if (closestIntersection != null) {
 					pixelColor = Color.BLACK;
-					
+
 					for (Light light : lights) {
-						
+
 						/***
 						 * Blin-Phong Shading / Interpolation
 						 */
-						Vector3D L = Vector3D.substract(light.getPosition(), closestIntersection.getPosition());
-						Vector3D V = Vector3D.substract(mainCamera.getPosition(), closestIntersection.getPosition());
-						Vector3D H = Vector3D.normalize((Vector3D.add(L, V)));
-						
-						float nDotL = light.getNDotL(closestIntersection);
-						float intensity = (float) light.getShader().getIntensity() * nDotL;
-						if (light instanceof PointLight) {
-							intensity /= Math.pow(
-									Vector3D.magnitude(
-											Vector3D.substract(closestIntersection.getPosition(), light.getPosition())),
-									2);
-						}
-
 						float specular = 1f;
 						float smooth = (float) closestIntersection.getObject().getShader().getDiffuse();
 						float ambient = .05f;
+						float[] newRGB = MaterialShader.calculateNewColors(light, closestIntersection, mainCamera,
+								ambient, specular, smooth);
 
-						float[] colors = new float[] {
-								closestIntersection.getObject().getShader().getColor().getRed() / 255.0f,
-								closestIntersection.getObject().getShader().getColor().getGreen() / 255.0f,
-								closestIntersection.getObject().getShader().getColor().getBlue() / 255.0f };
+						/***
+						 * Reflection and Refraction
+						 */
+						if (closestIntersection.getObject().getShader() instanceof ReflectiveMat) {
+							Intersection reflectionIntersection = reflection(closestIntersection, light, objects,
+									mainCamera);
 
-						float[] newRGB = new float[] { 0.0f, 0.0f, 0.0f };
+							if (reflectionIntersection != null) {
 
-						newRGB[0] += colors[0] *= ambient;
-						newRGB[1] += colors[1] *= ambient;
-						newRGB[2] += colors[2] *= ambient;
+								newRGB = MaterialShader.calculateNewColors(light, reflectionIntersection, mainCamera,
+										ambient, specular, smooth);
 
-						newRGB[0] += colors[0] *= intensity * (light.getShader().getColor().getRed() / 255.0f) * smooth;
-						newRGB[1] += colors[1] *= intensity * (light.getShader().getColor().getGreen() / 255.0f)
-								* smooth;
-						newRGB[2] += colors[2] *= intensity * (light.getShader().getColor().getBlue() / 255.0f)
-								* smooth;
+								Color newCol = new Color(clamp(newRGB[0], 0, 1), clamp(newRGB[1], 0, 1),
+										clamp(newRGB[2], 0, 1));
+								pixelColor = addColor(pixelColor, newCol);
 
-						specular *= (float) Math.pow(Vector3D.dotProduct(closestIntersection.getNormal(), H),
-								closestIntersection.getObject().getShader().getShininess());
+							}
 
-						newRGB[0] += colors[0] *= intensity * (light.getShader().getColor().getRed() / 255.0f)
-								* specular;
-						newRGB[1] += colors[1] *= intensity * (light.getShader().getColor().getGreen() / 255.0f)
-								* specular;
-						newRGB[2] += colors[2] *= intensity * (light.getShader().getColor().getBlue() / 255.0f)
-								* specular;
-						
+						} else if (closestIntersection.getObject().getShader() instanceof RefractiveMat) {
+							Intersection refractedIntersection = refraction(closestIntersection, light, objects,
+									mainCamera);
+							if (refractedIntersection != null) {
+								newRGB = MaterialShader.calculateNewColors(light, refractedIntersection, mainCamera,
+										ambient, specular, smooth);
+							}
+
+							Color newCol = new Color(clamp(newRGB[0], 0, 1), clamp(newRGB[1], 0, 1),
+									clamp(newRGB[2], 0, 1));
+							pixelColor = addColor(pixelColor, newCol);
+
+						}
+
 						/***
 						 * Shadow algorithm
 						 */
@@ -178,6 +193,7 @@ public class Raytracer {
 						if (shadowIntersection == null) {
 							diffuse = new Color(clamp(newRGB[0], 0, 1), clamp(newRGB[1], 0, 1), clamp(newRGB[2], 0, 1));
 						}
+
 						pixelColor = addColor(pixelColor, diffuse);
 					}
 
@@ -189,6 +205,67 @@ public class Raytracer {
 		return image;
 	}
 
+	public static Intersection reflection(Intersection closestIntersection, Light light, ArrayList<Object3D> objects,
+			Camera mainCamera) {
+		Vector3D N = closestIntersection.getNormal();
+		Vector3D I = Vector3D.substract(closestIntersection.getPosition(), mainCamera.getPosition());
+		Vector3D R = Vector3D.add(I, Vector3D.scalarMultiplication(N, -2 * Vector3D.dotProduct(N, I)));
+
+		// Recursiveness
+		Vector3D reflectedVector = R;
+
+		Ray reflectionRay = new Ray(closestIntersection.getPosition(), reflectedVector);
+		Intersection reflectedIntersection = raycast(reflectionRay, objects, closestIntersection.getObject(), null);
+
+		return reflectedIntersection;
+	}
+
+	public static Intersection refraction(Intersection closestIntersection, Light light, ArrayList<Object3D> objects,
+			Camera mainCamera) {
+		Intersection finalIntersection = null;
+		double ior = closestIntersection.getObject().getShader().getRefractionIndex();
+		Vector3D I = Vector3D.substract(closestIntersection.getPosition(), mainCamera.getPosition());
+		Vector3D N = closestIntersection.getNormal();
+		double IdotN = Vector3D.dotProduct(I, N);
+		Vector3D T = null;
+
+		double cosi = clamp(-1.0f, 1.0f, (float) IdotN);
+		double etai = 1, etat = ior;
+		Vector3D n = N;
+		if (cosi < 0) {
+			cosi = -cosi;
+		} else {
+			double temp = etai;
+			etai = etat;
+			etat = temp;
+			n = Vector3D.scalarMultiplication(N, -1.0);
+		}
+		double eta = etai / etat;
+		double k = 1 - (eta * eta) * (1 - (cosi * cosi));
+		if (k <= 0) {
+			T = Vector3D.ZERO();
+		} else {
+			T = Vector3D.add(Vector3D.scalarMultiplication(I, eta),
+					Vector3D.scalarMultiplication(n, ((eta * cosi) - Math.sqrt(k))));
+		}
+
+		Vector3D refractedVector = T;
+
+		Ray refractedRay = new Ray(closestIntersection.getPosition(), refractedVector);
+		Intersection refractedIntersection = raycast(refractedRay, objects, closestIntersection.getObject(), null);
+		finalIntersection = refractedIntersection;
+
+		return finalIntersection;
+	}
+
+	/***
+	 * Value Clamp Method
+	 * 
+	 * @param value
+	 * @param min
+	 * @param max
+	 * @return
+	 */
 	public static float clamp(float value, float min, float max) {
 		if (value < min) {
 			return min;
@@ -201,6 +278,13 @@ public class Raytracer {
 		return value;
 	}
 
+	/***
+	 * Color per Pixel Clamping Method
+	 * 
+	 * @param original
+	 * @param otherColor
+	 * @return
+	 */
 	public static Color addColor(Color original, Color otherColor) {
 		float red = clamp((original.getRed() / 255.0f) + (otherColor.getRed() / 255.0f), 0, 1);
 		float green = clamp((original.getGreen() / 255.0f) + (otherColor.getGreen() / 255.0f), 0, 1);
