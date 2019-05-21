@@ -1,13 +1,5 @@
-/**
- *  2019 - Universidad Panamericana 
- *  All Rights Reserved
- */
-package edu.up.isgc.raytracer.tools;
+package aemn.raytracer.tools;
 
-import edu.up.isgc.material.MaterialShader;
-import edu.up.isgc.raytracer.Vector3D;
-import edu.up.isgc.raytracer.objects.Polygon;
-import edu.up.isgc.raytracer.objects.Triangle;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -20,15 +12,30 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import aemn.material.MaterialShader;
+import aemn.raytracer.Vector3D;
+import aemn.raytracer.objects.Polygon;
+import aemn.raytracer.objects.Triangle;
+
 /**
  *
- * @author Jafet
+ * @author Alan Maldonado
  */
 public class OBJReader {
 
+	/***
+	 * 
+	 */
 	private OBJReader() {
 	}
 
+	/***
+	 * Class Method that creates a polygon from a file
+	 * @param path
+	 * @param origin
+	 * @param shader
+	 * @return
+	 */
 	public static Polygon GetPolygon(String path, Vector3D origin, MaterialShader shader) {
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(path));

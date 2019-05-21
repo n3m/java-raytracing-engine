@@ -1,4 +1,4 @@
-package edu.up.isgc.raytracer;
+package aemn.raytracer;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -9,20 +9,20 @@ import java.util.Date;
 
 import javax.imageio.ImageIO;
 
-import edu.up.isgc.material.LambertMat;
-import edu.up.isgc.material.MaterialShader;
-import edu.up.isgc.material.ReflectiveMat;
-import edu.up.isgc.material.RefractiveMat;
-import edu.up.isgc.raytracer.lights.Light;
-import edu.up.isgc.raytracer.lights.PointLight;
-import edu.up.isgc.raytracer.objects.Camera;
-import edu.up.isgc.raytracer.objects.Object3D;
-import edu.up.isgc.raytracer.objects.Sphere;
-import edu.up.isgc.raytracer.tools.OBJReader;
+import aemn.material.LambertMat;
+import aemn.material.MaterialShader;
+import aemn.material.ReflectiveMat;
+import aemn.material.RefractiveMat;
+import aemn.raytracer.lights.Light;
+import aemn.raytracer.lights.PointLight;
+import aemn.raytracer.objects.Camera;
+import aemn.raytracer.objects.Object3D;
+import aemn.raytracer.objects.Sphere;
+import aemn.raytracer.tools.OBJReader;
 
 /**
  *
- * @author Alan
+ * @author Alan Maldonado
  */
 public class Raytracer {
 
@@ -41,29 +41,23 @@ public class Raytracer {
 		/**************** Scene ****************/
 		// Scene Configuration
 		sceneRoot.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 0f, 50f));
-		sceneRoot.addLight(new PointLight(new Vector3D(-3, 2.0, 0), new LambertMat(Color.WHITE, 500, 0, 0, 0)));
+		sceneRoot.addLight(new PointLight(new Vector3D(-3, 2.0, 0), new LambertMat(Color.WHITE, 500, 0, 0)));
 		// Scene OBJs
 
 		sceneRoot.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(0, -2.5, 1.5),
-				new LambertMat(Color.ORANGE, 0, 5, 0.1f, 0)));
+				new LambertMat(Color.ORANGE, 0, 5, 0.1f)));
 
 		sceneRoot.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 1.5),
-				new ReflectiveMat(Color.WHITE, 0, 5, 0.1f, 0)));
+				new ReflectiveMat(Color.WHITE, 0, 5, 0.1f)));
 		// Scene Objects
 		sceneRoot.addObject(
-				new Sphere(new Vector3D(-2.0, -2.0, 1.5), 0.5, new ReflectiveMat(Color.PINK, 0, 15, 0.5f, 0)));
+				new Sphere(new Vector3D(-2.0, -2.0, 1.5), 0.5, new ReflectiveMat(Color.PINK, 0, 15, 0.5f)));
 		sceneRoot.addObject(
-				new Sphere(new Vector3D(2.0, -2.0, 1.5), 0.3, new ReflectiveMat(Color.WHITE, 0, 50, 0.5f, 0)));
+				new Sphere(new Vector3D(2.0, -2.0, 1.5), 0.3, new ReflectiveMat(Color.WHITE, 0, 50, 0.5f)));
 
 		sceneRoot.addObject(
 				new Sphere(new Vector3D(0.3, -.8, -3), 0.4, new RefractiveMat(Color.WHITE, 0, 5, 0.5f, 1.5)));
 
-		// Testing DELETE
-
-		/*
-		 * sceneRoot.addObject( new Sphere(new Vector3D(0.0, -1.0, 0.5), 0.5, new
-		 * ReflectiveMat(Color.ORANGE, 0, 15, 0.5f, 0)));
-		 */
 		/****************** SCENE FINISH ****************/
 
 		BufferedImage image = raytrace(sceneRoot);
@@ -205,6 +199,14 @@ public class Raytracer {
 		return image;
 	}
 
+	/***
+	 * Reflection Method
+	 * @param closestIntersection
+	 * @param light
+	 * @param objects
+	 * @param mainCamera
+	 * @return
+	 */
 	public static Intersection reflection(Intersection closestIntersection, Light light, ArrayList<Object3D> objects,
 			Camera mainCamera) {
 		Vector3D N = closestIntersection.getNormal();
@@ -220,33 +222,47 @@ public class Raytracer {
 		return reflectedIntersection;
 	}
 
+	/***
+	 * Refraction Method
+	 * @param closestIntersection
+	 * @param light
+	 * @param objects
+	 * @param mainCamera
+	 * @return
+	 */
 	public static Intersection refraction(Intersection closestIntersection, Light light, ArrayList<Object3D> objects,
 			Camera mainCamera) {
 		Intersection finalIntersection = null;
-		double ior = closestIntersection.getObject().getShader().getRefractionIndex();
+		
+		double IndexOfRefraction = ((RefractiveMat) closestIntersection.getObject().getShader()).getRefractionIndex();
 		Vector3D I = Vector3D.substract(closestIntersection.getPosition(), mainCamera.getPosition());
 		Vector3D N = closestIntersection.getNormal();
 		double IdotN = Vector3D.dotProduct(I, N);
 		Vector3D T = null;
 
-		double cosi = clamp(-1.0f, 1.0f, (float) IdotN);
-		double etai = 1, etat = ior;
-		Vector3D n = N;
-		if (cosi < 0) {
-			cosi = -cosi;
+		double theta_I = 1;
+		double theta_T = IndexOfRefraction;
+		double cos_thetaI = clamp(-1.0f, 1.0f, (float) IdotN);
+		
+		Vector3D normalCpy = N.clone();
+		
+		if (cos_thetaI < 0) {
+			cos_thetaI = -cos_thetaI;
 		} else {
-			double temp = etai;
-			etai = etat;
-			etat = temp;
-			n = Vector3D.scalarMultiplication(N, -1.0);
+			double oldVal = theta_I;
+			theta_I = theta_T;
+			theta_T = oldVal;
+			normalCpy = Vector3D.scalarMultiplication(N, -1.0);
 		}
-		double eta = etai / etat;
-		double k = 1 - (eta * eta) * (1 - (cosi * cosi));
-		if (k <= 0) {
+		
+		double finalTheta = theta_I / theta_T;
+		double finalConstant = 1 - Math.pow(finalTheta, 2) * (1 - Math.pow(cos_thetaI, 2));
+		
+		if (finalConstant <= 0) {
 			T = Vector3D.ZERO();
 		} else {
-			T = Vector3D.add(Vector3D.scalarMultiplication(I, eta),
-					Vector3D.scalarMultiplication(n, ((eta * cosi) - Math.sqrt(k))));
+			T = Vector3D.add(Vector3D.scalarMultiplication(I, finalTheta),
+					Vector3D.scalarMultiplication(normalCpy, ((finalTheta * cos_thetaI) - Math.sqrt(finalConstant))));
 		}
 
 		Vector3D refractedVector = T;

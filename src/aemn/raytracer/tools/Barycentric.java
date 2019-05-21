@@ -1,13 +1,28 @@
-package edu.up.isgc.raytracer.tools;
+package aemn.raytracer.tools;
 
-import edu.up.isgc.raytracer.Vector3D;
-import edu.up.isgc.raytracer.objects.Triangle;
+import aemn.raytracer.Vector3D;
+import aemn.raytracer.objects.Triangle;
 
+/***
+ * 
+ * @author Alan Maldonado
+ *
+ */
 public class Barycentric {
 
+	/***
+	 * 
+	 */
 	private Barycentric() {
+		
 	}
 
+	/***
+	 * Class Method that calculates the Barycentric Coords of a Point in a Triangle
+	 * @param point
+	 * @param triangle
+	 * @return
+	 */
 	// Based on Christer Ericson's Real-Time Collision Detection
 	public static double[] CalculateBarycentricCoordinates(Vector3D point, Triangle triangle) {
 		double u, v, w;
