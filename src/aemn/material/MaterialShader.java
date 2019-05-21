@@ -1,20 +1,18 @@
-/**
- * 
- */
-package edu.up.isgc.material;
+package aemn.material;
 
 import java.awt.Color;
 
-import edu.up.isgc.raytracer.Intersection;
-import edu.up.isgc.raytracer.Vector3D;
-import edu.up.isgc.raytracer.lights.Light;
-import edu.up.isgc.raytracer.lights.PointLight;
-import edu.up.isgc.raytracer.objects.Camera;
+import aemn.raytracer.Intersection;
+import aemn.raytracer.Vector3D;
+import aemn.raytracer.lights.Light;
+import aemn.raytracer.lights.PointLight;
+import aemn.raytracer.objects.Camera;
 
 /**
- * @author User
+ * @author Alan Maldonado
  *
  */
+
 public abstract class MaterialShader {
 	
 	private Color color;
@@ -23,54 +21,96 @@ public abstract class MaterialShader {
 	private double shininess;
 	private double refractionIndex;
 	
-	public MaterialShader(Color color, double intensity, double shininess, double diffuse, double refraction) {
+	/***
+	 * Material Constructor
+	 * @param color
+	 * @param intensity
+	 * @param shininess
+	 * @param diffuse
+	 * @param refraction
+	 */
+	public MaterialShader(Color color, double intensity, double shininess, double diffuse) {
 		setColor(color);
 		setDiffuse(diffuse);
 		setIntensity(intensity);
 		setShininess(shininess);
-		setRefractionIndex(refraction);
+		
 	}
 
+	/***
+	 * Get Color
+	 * @return
+	 */
 	public Color getColor() {
 		return color;
 	}
 
+	/***
+	 * Set Color
+	 * @param color
+	 */
 	private void setColor(Color color) {
 		this.color = color;
 	}
 
+	/***
+	 * Get Diffuse Value
+	 * @return
+	 */
 	public double getDiffuse() {
 		return diffuse;
 	}
 
+	/***
+	 * Set Diffuse Value
+	 * @param diffuse
+	 */
 	private void setDiffuse(double diffuse) {
 		this.diffuse = diffuse;
 	}
 
+	/***
+	 * Get Intensity Value
+	 * @return
+	 */
 	public double getIntensity() {
 		return intensity;
 	}
 
+	/***
+	 * Set Intensity Value
+	 * @param instensity
+	 */
 	private void setIntensity(double instensity) {
 		this.intensity = instensity;
 	}
 
+	/***
+	 * Get Shininess Value
+	 * @return
+	 */
 	public double getShininess() {
 		return shininess;
 	}
 
+	/***
+	 * Set Shininess Value
+	 * @param shininess
+	 */
 	private void setShininess(double shininess) {
 		this.shininess = shininess;
 	}
-
-	public double getRefractionIndex() {
-		return refractionIndex;
-	}
-
-	public void setRefractionIndex(double refractionIndex) {
-		this.refractionIndex = refractionIndex;
-	}
 	
+	/***
+	 * RGB Calculation Algorithm
+	 * @param light
+	 * @param intersection
+	 * @param mainCamera
+	 * @param ambient
+	 * @param specular
+	 * @param smooth
+	 * @return
+	 */
 	public static float[] calculateNewColors(Light light, Intersection intersection, Camera mainCamera, float ambient, float specular, float smooth) {
 		Color newCol = null;
 		// Calculate again

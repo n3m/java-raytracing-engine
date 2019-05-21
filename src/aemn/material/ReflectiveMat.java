@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.up.isgc.material;
+package aemn.material;
 
 import java.awt.Color;
 
@@ -18,8 +18,8 @@ public class ReflectiveMat extends MaterialShader {
 	 * @param diffuse
 	 * @param refraction
 	 */
-	public ReflectiveMat(Color color, double intensity, double shininess, double diffuse, double refraction) {
-		super(color, intensity, shininess, diffuse, refraction);
+	public ReflectiveMat(Color color, double intensity, double shininess, double diffuse) {
+		super(color, intensity, shininess, diffuse);
 		// TODO Auto-generated constructor stub
 	}
 

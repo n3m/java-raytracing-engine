@@ -1,25 +1,24 @@
-/**
- * 
- */
-package edu.up.isgc.material;
+
+package aemn.material;
 
 import java.awt.Color;
 
 /**
- * @author User
+ * @author Alan Maldonado
  *
  */
 public class LambertMat extends MaterialShader {
 
 	/**
+	 * Definition: Lambert Material! 
 	 * @param color
 	 * @param intensity
 	 * @param shininess
 	 * @param diffuse
 	 * @param refraction
 	 */
-	public LambertMat(Color color, double intensity, double shininess, double diffuse, double refraction) {
-		super(color, intensity, shininess, diffuse, refraction);
+	public LambertMat(Color color, double intensity, double shininess, double diffuse) {
+		super(color, intensity, shininess, diffuse);
 		// TODO Auto-generated constructor stub
 	}
 

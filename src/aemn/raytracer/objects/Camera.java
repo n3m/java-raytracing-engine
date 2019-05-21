@@ -1,20 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package edu.up.isgc.raytracer.objects;
+package aemn.raytracer.objects;
 
-import edu.up.isgc.material.LambertMat;
-import edu.up.isgc.material.MaterialShader;
-import edu.up.isgc.raytracer.Intersection;
-import edu.up.isgc.raytracer.Ray;
-import edu.up.isgc.raytracer.Vector3D;
 import java.awt.Color;
+
+import aemn.material.LambertMat;
+import aemn.material.MaterialShader;
+import aemn.raytracer.Intersection;
+import aemn.raytracer.Ray;
+import aemn.raytracer.Vector3D;
 
 /**
  *
- * @author Jafet
+ * @author Alan Maldonado
  */
 public class Camera extends Object3D {
 	// 0 is fovh
@@ -23,8 +19,18 @@ public class Camera extends Object3D {
 	private float defaultZ = 15f;
 	private int[] resolution;
 	private float[] nearFarPlanes = new float[2];
-	private static MaterialShader def = new LambertMat(Color.black, 0, 0, 0, 0);
+	private static MaterialShader def = new LambertMat(Color.black, 0, 0, 0);
 
+	/***
+	 * 
+	 * @param position
+	 * @param fieldOfViewHorizontal
+	 * @param fieldOfViewVertical
+	 * @param widthResolution
+	 * @param heightResolution
+	 * @param nearPlane
+	 * @param farPlane
+	 */
 	public Camera(Vector3D position, float fieldOfViewHorizontal, float fieldOfViewVertical, int widthResolution, int heightResolution, float nearPlane, float farPlane){
 		super(position, def);
 		setFieldOfViewHorizontal(fieldOfViewHorizontal);
@@ -33,42 +39,82 @@ public class Camera extends Object3D {
 		setNearFarPlanes(new float[]{nearPlane, farPlane});
 	}
 
+	/***
+	 * Get camera Z
+	 * @return
+	 */
 	public float getDefaultZ() {
 		return defaultZ;
 	}
 
+	/***
+	 * Set camera Z
+	 * @param defaultZ
+	 */
 	public void setDefaultZ(float defaultZ) {
 		this.defaultZ = defaultZ;
 	}
 
+	/***
+	 * Get camera resolution
+	 * @return
+	 */
 	public int[] getResolution() {
 		return resolution;
 	}
 
+	/***
+	 * Set camera resolution
+	 * @param resolution
+	 */
 	public void setResolution(int[] resolution) {
 		this.resolution = resolution;
 	}
 
+	/***
+	 * Get field of view horizontal values
+	 * @return
+	 */
 	public float getFieldOfViewHorizontal() {
 		return fieldOfView[0];
 	}
 
+	/***
+	 * Get field of view vertical values
+	 * @return
+	 */
 	public float getFieldOfViewVertical() {
 		return fieldOfView[1];
 	}
 
+	/***
+	 * Set field of view horizontal values
+	 * @param fov
+	 */
 	public void setFieldOfViewHorizontal(float fov) {
 		fieldOfView[0] = fov;
 	}
 
+	/***
+	 * Set vertical field of view values
+	 * @param fov
+	 */
 	public void setFieldOfViewVertical(float fov) {
 		fieldOfView[1] = fov;
 	}
 
+	/***
+	 * Get Field of View
+	 * @return
+	 */
 	public float[] getFieldOfView() {
 		return fieldOfView;
 	}
 
+	/***
+	 * Class method that generates the 3D environment in a 2D Plane
+	 * @return
+	 */
 	public Vector3D[][] calculatePositionsToRay() {
 		float angleMaxX = 90 - (getFieldOfViewHorizontal() / 2f);
 		float radiusMaxX = getDefaultZ() / (float) Math.cos(Math.toRadians(angleMaxX));
@@ -95,10 +141,18 @@ public class Camera extends Object3D {
 		return positions;
 	}
 	
+	/***
+	 * Method that returns the clipping planes
+	 * @return
+	 */
 	public float[] getNearFarPlanes() {
         return nearFarPlanes;
     }
 
+	/***
+	 * Method that sets the clipping planes
+	 * @param nearFarPlanes
+	 */
     public void setNearFarPlanes(float[] nearFarPlanes) {
         this.nearFarPlanes = nearFarPlanes;
     }
