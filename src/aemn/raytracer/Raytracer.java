@@ -233,30 +233,36 @@ public class Raytracer {
 	public static Intersection refraction(Intersection closestIntersection, Light light, ArrayList<Object3D> objects,
 			Camera mainCamera) {
 		Intersection finalIntersection = null;
-		double ior = ((RefractiveMat) closestIntersection.getObject().getShader()).getRefractionIndex();
+		
+		double IndexOfRefraction = ((RefractiveMat) closestIntersection.getObject().getShader()).getRefractionIndex();
 		Vector3D I = Vector3D.substract(closestIntersection.getPosition(), mainCamera.getPosition());
 		Vector3D N = closestIntersection.getNormal();
 		double IdotN = Vector3D.dotProduct(I, N);
 		Vector3D T = null;
 
-		double cosi = clamp(-1.0f, 1.0f, (float) IdotN);
-		double etai = 1, etat = ior;
-		Vector3D n = N;
-		if (cosi < 0) {
-			cosi = -cosi;
+		double theta_I = 1;
+		double theta_T = IndexOfRefraction;
+		double cos_thetaI = clamp(-1.0f, 1.0f, (float) IdotN);
+		
+		Vector3D normalCpy = N.clone();
+		
+		if (cos_thetaI < 0) {
+			cos_thetaI = -cos_thetaI;
 		} else {
-			double temp = etai;
-			etai = etat;
-			etat = temp;
-			n = Vector3D.scalarMultiplication(N, -1.0);
+			double oldVal = theta_I;
+			theta_I = theta_T;
+			theta_T = oldVal;
+			normalCpy = Vector3D.scalarMultiplication(N, -1.0);
 		}
-		double eta = etai / etat;
-		double k = 1 - (eta * eta) * (1 - (cosi * cosi));
-		if (k <= 0) {
+		
+		double finalTheta = theta_I / theta_T;
+		double finalConstant = 1 - Math.pow(finalTheta, 2) * (1 - Math.pow(cos_thetaI, 2));
+		
+		if (finalConstant <= 0) {
 			T = Vector3D.ZERO();
 		} else {
-			T = Vector3D.add(Vector3D.scalarMultiplication(I, eta),
-					Vector3D.scalarMultiplication(n, ((eta * cosi) - Math.sqrt(k))));
+			T = Vector3D.add(Vector3D.scalarMultiplication(I, finalTheta),
+					Vector3D.scalarMultiplication(normalCpy, ((finalTheta * cos_thetaI) - Math.sqrt(finalConstant))));
 		}
 
 		Vector3D refractedVector = T;
