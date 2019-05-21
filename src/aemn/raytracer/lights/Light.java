@@ -1,11 +1,11 @@
 
-package edu.up.isgc.raytracer.lights;
+package aemn.raytracer.lights;
 
-import edu.up.isgc.material.MaterialShader;
-import edu.up.isgc.raytracer.Intersection;
-import edu.up.isgc.raytracer.Ray;
-import edu.up.isgc.raytracer.Vector3D;
-import edu.up.isgc.raytracer.objects.Object3D;
+import aemn.material.MaterialShader;
+import aemn.raytracer.Intersection;
+import aemn.raytracer.Ray;
+import aemn.raytracer.Vector3D;
+import aemn.raytracer.objects.Object3D;
 
 /**
  *

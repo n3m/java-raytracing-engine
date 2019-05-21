@@ -1,12 +1,12 @@
-package edu.up.isgc.raytracer.objects;
+package aemn.raytracer.objects;
 
 import java.awt.Color;
 
-import edu.up.isgc.material.LambertMat;
-import edu.up.isgc.material.MaterialShader;
-import edu.up.isgc.raytracer.Intersection;
-import edu.up.isgc.raytracer.Ray;
-import edu.up.isgc.raytracer.Vector3D;
+import aemn.material.LambertMat;
+import aemn.material.MaterialShader;
+import aemn.raytracer.Intersection;
+import aemn.raytracer.Ray;
+import aemn.raytracer.Vector3D;
 
 /**
  *

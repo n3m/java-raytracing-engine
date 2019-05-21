@@ -1,9 +1,10 @@
-package edu.up.isgc.raytracer;
+package aemn.raytracer;
 
-import edu.up.isgc.raytracer.lights.Light;
-import edu.up.isgc.raytracer.objects.Camera;
-import edu.up.isgc.raytracer.objects.Object3D;
 import java.util.ArrayList;
+
+import aemn.raytracer.lights.Light;
+import aemn.raytracer.objects.Camera;
+import aemn.raytracer.objects.Object3D;
 
 /**
  *

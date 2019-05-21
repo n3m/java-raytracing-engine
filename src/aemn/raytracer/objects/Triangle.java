@@ -1,7 +1,7 @@
-package edu.up.isgc.raytracer.objects;
+package aemn.raytracer.objects;
 
-import edu.up.isgc.raytracer.Ray;
-import edu.up.isgc.raytracer.Vector3D;
+import aemn.raytracer.Ray;
+import aemn.raytracer.Vector3D;
 
 /**
  *

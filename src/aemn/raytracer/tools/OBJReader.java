@@ -1,9 +1,5 @@
-package edu.up.isgc.raytracer.tools;
+package aemn.raytracer.tools;
 
-import edu.up.isgc.material.MaterialShader;
-import edu.up.isgc.raytracer.Vector3D;
-import edu.up.isgc.raytracer.objects.Polygon;
-import edu.up.isgc.raytracer.objects.Triangle;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -15,6 +11,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import aemn.material.MaterialShader;
+import aemn.raytracer.Vector3D;
+import aemn.raytracer.objects.Polygon;
+import aemn.raytracer.objects.Triangle;
 
 /**
  *

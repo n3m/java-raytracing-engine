@@ -1,5 +1,5 @@
 
-package edu.up.isgc.material;
+package aemn.material;
 
 import java.awt.Color;
 

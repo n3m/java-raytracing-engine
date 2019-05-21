@@ -1,16 +1,16 @@
 
-package edu.up.isgc.raytracer.objects;
+package aemn.raytracer.objects;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import edu.up.isgc.material.MaterialShader;
-import edu.up.isgc.raytracer.Intersection;
-import edu.up.isgc.raytracer.Ray;
-import edu.up.isgc.raytracer.Vector3D;
-import edu.up.isgc.raytracer.tools.Barycentric;
+import aemn.material.MaterialShader;
+import aemn.raytracer.Intersection;
+import aemn.raytracer.Ray;
+import aemn.raytracer.Vector3D;
+import aemn.raytracer.tools.Barycentric;
 
 /**
  *

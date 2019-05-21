@@ -1,6 +1,6 @@
-package edu.up.isgc.raytracer;
+package aemn.raytracer;
 
-import edu.up.isgc.raytracer.objects.Object3D;
+import aemn.raytracer.objects.Object3D;
 
 /**
  *

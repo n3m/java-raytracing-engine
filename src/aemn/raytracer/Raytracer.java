@@ -1,4 +1,4 @@
-package edu.up.isgc.raytracer;
+package aemn.raytracer;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -9,16 +9,16 @@ import java.util.Date;
 
 import javax.imageio.ImageIO;
 
-import edu.up.isgc.material.LambertMat;
-import edu.up.isgc.material.MaterialShader;
-import edu.up.isgc.material.ReflectiveMat;
-import edu.up.isgc.material.RefractiveMat;
-import edu.up.isgc.raytracer.lights.Light;
-import edu.up.isgc.raytracer.lights.PointLight;
-import edu.up.isgc.raytracer.objects.Camera;
-import edu.up.isgc.raytracer.objects.Object3D;
-import edu.up.isgc.raytracer.objects.Sphere;
-import edu.up.isgc.raytracer.tools.OBJReader;
+import aemn.material.LambertMat;
+import aemn.material.MaterialShader;
+import aemn.material.ReflectiveMat;
+import aemn.material.RefractiveMat;
+import aemn.raytracer.lights.Light;
+import aemn.raytracer.lights.PointLight;
+import aemn.raytracer.objects.Camera;
+import aemn.raytracer.objects.Object3D;
+import aemn.raytracer.objects.Sphere;
+import aemn.raytracer.tools.OBJReader;
 
 /**
  *

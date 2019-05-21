@@ -1,5 +1,5 @@
 
-package edu.up.isgc.raytracer;
+package aemn.raytracer;
 
 /**
  *
