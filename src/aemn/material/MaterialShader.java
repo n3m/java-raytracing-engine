@@ -19,7 +19,6 @@ public abstract class MaterialShader {
 	private double diffuse;
 	private double intensity;
 	private double shininess;
-	private double refractionIndex;
 	
 	/***
 	 * Material Constructor
