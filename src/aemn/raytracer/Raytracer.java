@@ -37,45 +37,44 @@ public class Raytracer {
 		System.out.println(new Date());
 
 		Scene scene01 = new Scene();
-
-		/**************** Scene 01****************/
-		// Scene Configuration
-		scene01.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 0f, 50f));
-		scene01.addLight(new PointLight(new Vector3D(-3, 2.0, 0), new LambertMat(Color.WHITE, 500, 0, 0)));
-		// Scene OBJs
-
-		scene01.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(0, -2.5, 1.5),
-				new LambertMat(Color.ORANGE, 0, 5, 0.1f)));
-		scene01.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 1.5),
-				new ReflectiveMat(Color.WHITE, 0, 5, 0.1f)));
-		scene01.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(2, -2.5, 1.5),
-				new RefractiveMat(Color.WHITE, 0, 5, 0.1f, 1.5)));
-		// Scene Objects
-		scene01.addObject(
-				new Sphere(new Vector3D(-2.0, -2.0, 1.5), 0.5, new ReflectiveMat(Color.PINK, 0, 15, 0.5f)));
-		scene01.addObject(
-				new Sphere(new Vector3D(2.0, -2.0, 1.5), 0.3, new ReflectiveMat(Color.WHITE, 0, 50, 0.5f)));
-		scene01.addObject(
-				new Sphere(new Vector3D(0.3, -.8, -3), 0.4, new RefractiveMat(Color.WHITE, 0, 5, 0.5f, 1.5)));
-
-		/****************** SCENE FINISH ****************/
-		/**************** Scene 01****************/
+		/**************** Scene 02****************/
 		// Scene Configuration
 		Scene scene02 = new Scene();
 		scene02.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 0f, 50f));
-		scene02.addLight(new PointLight(new Vector3D(0, 1.0, 0), new LambertMat(Color.WHITE, 400, 0, 0)));
-		scene02.addLight(new PointLight(new Vector3D(0, 1.0, 4.5), new LambertMat(Color.WHITE, 400, 0, 0)));
+		//scene02.addLight(new PointLight(new Vector3D(0, 1.0, 5), new LambertMat(Color.WHITE, 400, 0, 0)));
+		
 		// Scene OBJs
 		scene02.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 1),
 				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
 		scene02.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 5.5),
 				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
-		scene02.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(-1.5, -2.5, 2),
-				new ReflectiveMat(Color.YELLOW, 0, 5, 0.1f)));
-		scene02.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(1.5, -2.5, 2),
-				new ReflectiveMat(Color.YELLOW, 0, 5, 0.1f)));
+		
+		/** First Showroom **/
+		scene02.addLight(new PointLight(new Vector3D(-1.5, 1, 0), new LambertMat(Color.WHITE, 200, 0, 0)));
+		scene02.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(-1.5, -2.4, 0),
+				new ReflectiveMat(Color.YELLOW, 0.0, 5.0, 0.1f)));
+		scene02.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(-1.5, -1.5, 0),
+				new RefractiveMat(Color.WHITE, 0.0, 75.0, 0.1f, 1.5)));
+		
+		/** Second Showroom **/
+		scene02.addLight(new PointLight(new Vector3D(1.5, 1.0, 0.0), new LambertMat(Color.WHITE, 200, 0, 0)));
+		scene02.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(1.5, -2.4, 0),
+				new ReflectiveMat(Color.YELLOW, 0, 5.0, 0.1f)));
+		scene02.addObject(new Sphere(new Vector3D(1.5, -1.0, 0), 0.4, new RefractiveMat(Color.WHITE, 0, 75, 0.1f, 1.5)));
+		
+		/** Third Showroom **/
+		scene02.addLight(new PointLight(new Vector3D(1.5, 1.0, 5), new LambertMat(Color.WHITE, 200, 0, 0)));
+		scene02.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(1.5, -2.4, 5),
+				new LambertMat(Color.ORANGE, 0, 5.0, 0.1f)));
+		
+		/** Fourth Showroom **/
+		scene02.addLight(new PointLight(new Vector3D(-1.5, 1, 5), new LambertMat(Color.WHITE, 200, 0, 0)));
+		scene02.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(-1.5, -2.4, 5),
+				new LambertMat(Color.ORANGE, 0.0, 5.0, 0.1f)));
+		
+		
 		// Scene Objects
-
+		
 		/****************** SCENE FINISH ****************/
 
 		BufferedImage image = raytrace(scene02);
