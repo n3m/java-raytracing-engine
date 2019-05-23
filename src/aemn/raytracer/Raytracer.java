@@ -36,32 +36,50 @@ public class Raytracer {
 		System.out.println("AEMN -> Raytracer v" + version);
 		System.out.println(new Date());
 
-		Scene sceneRoot = new Scene();
+		Scene scene01 = new Scene();
 
-		/**************** Scene ****************/
+		/**************** Scene 01****************/
 		// Scene Configuration
-		sceneRoot.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 0f, 50f));
-		sceneRoot.addLight(new PointLight(new Vector3D(-3, 2.0, 0), new LambertMat(Color.WHITE, 500, 0, 0)));
+		scene01.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 0f, 50f));
+		scene01.addLight(new PointLight(new Vector3D(-3, 2.0, 0), new LambertMat(Color.WHITE, 500, 0, 0)));
 		// Scene OBJs
 
-		sceneRoot.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(0, -2.5, 1.5),
+		scene01.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(0, -2.5, 1.5),
 				new LambertMat(Color.ORANGE, 0, 5, 0.1f)));
-
-		sceneRoot.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 1.5),
+		scene01.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 1.5),
 				new ReflectiveMat(Color.WHITE, 0, 5, 0.1f)));
+		scene01.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(2, -2.5, 1.5),
+				new RefractiveMat(Color.WHITE, 0, 5, 0.1f, 1.5)));
 		// Scene Objects
-		sceneRoot.addObject(
+		scene01.addObject(
 				new Sphere(new Vector3D(-2.0, -2.0, 1.5), 0.5, new ReflectiveMat(Color.PINK, 0, 15, 0.5f)));
-		sceneRoot.addObject(
+		scene01.addObject(
 				new Sphere(new Vector3D(2.0, -2.0, 1.5), 0.3, new ReflectiveMat(Color.WHITE, 0, 50, 0.5f)));
-
-		sceneRoot.addObject(
+		scene01.addObject(
 				new Sphere(new Vector3D(0.3, -.8, -3), 0.4, new RefractiveMat(Color.WHITE, 0, 5, 0.5f, 1.5)));
 
 		/****************** SCENE FINISH ****************/
+		/**************** Scene 01****************/
+		// Scene Configuration
+		Scene scene02 = new Scene();
+		scene02.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 0f, 50f));
+		scene02.addLight(new PointLight(new Vector3D(0, 1.0, 0), new LambertMat(Color.WHITE, 400, 0, 0)));
+		scene02.addLight(new PointLight(new Vector3D(0, 1.0, 4.5), new LambertMat(Color.WHITE, 400, 0, 0)));
+		// Scene OBJs
+		scene02.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 1),
+				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
+		scene02.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 5.5),
+				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
+		scene02.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(-1.5, -2.5, 2),
+				new ReflectiveMat(Color.YELLOW, 0, 5, 0.1f)));
+		scene02.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(1.5, -2.5, 2),
+				new ReflectiveMat(Color.YELLOW, 0, 5, 0.1f)));
+		// Scene Objects
 
-		BufferedImage image = raytrace(sceneRoot);
-		File outputImage = new File("image.png");
+		/****************** SCENE FINISH ****************/
+
+		BufferedImage image = raytrace(scene02);
+		File outputImage = new File("scene02.png");
 		try {
 			ImageIO.write(image, "png", outputImage);
 		} catch (IOException ex) {
