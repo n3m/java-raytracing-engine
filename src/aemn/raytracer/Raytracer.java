@@ -36,7 +36,6 @@ public class Raytracer {
 		System.out.println("AEMN -> Raytracer v" + version);
 		System.out.println(new Date());
 
-		Scene scene01 = new Scene();
 		/**************** Scene 02****************/
 		// Scene Configuration
 		Scene scene02 = new Scene();
@@ -50,28 +49,31 @@ public class Raytracer {
 				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
 		
 		/** First Showroom **/
-		scene02.addLight(new PointLight(new Vector3D(-1.5, 1, 0), new LambertMat(Color.WHITE, 200, 0, 0)));
+		/*scene02.addLight(new PointLight(new Vector3D(-1.5, 1, 0), new LambertMat(Color.WHITE, 200, 0, 0)));
 		scene02.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(-1.5, -2.4, 0),
 				new ReflectiveMat(Color.YELLOW, 0.0, 5.0, 0.1f)));
-		scene02.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(-1.5, -1.5, 0),
-				new RefractiveMat(Color.WHITE, 0.0, 75.0, 0.1f, 1.5)));
+		scene02.addObject(OBJReader.GetPolygon("plant.obj", new Vector3D(-1.5, -1.5, 0),
+				new ReflectiveMat(Color.GREEN, 0.0, 75.0, 0.1f)));
 		
 		/** Second Showroom **/
-		scene02.addLight(new PointLight(new Vector3D(1.5, 1.0, 0.0), new LambertMat(Color.WHITE, 200, 0, 0)));
+		/*scene02.addLight(new PointLight(new Vector3D(1.5, 1.0, 0.0), new LambertMat(Color.WHITE, 200, 0, 0)));
 		scene02.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(1.5, -2.4, 0),
 				new ReflectiveMat(Color.YELLOW, 0, 5.0, 0.1f)));
-		scene02.addObject(new Sphere(new Vector3D(1.5, -1.0, 0), 0.4, new RefractiveMat(Color.WHITE, 0, 75, 0.1f, 1.5)));
-		
+		scene02.addObject(new Sphere(new Vector3D(1.5, -1.0, 0), 0.4, new ReflectiveMat(Color.WHITE, 0, 75, 0.1f)));
+		*/
 		/** Third Showroom **/
 		scene02.addLight(new PointLight(new Vector3D(1.5, 1.0, 5), new LambertMat(Color.WHITE, 200, 0, 0)));
 		scene02.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(1.5, -2.4, 5),
 				new LambertMat(Color.ORANGE, 0, 5.0, 0.1f)));
+		scene02.addObject(OBJReader.GetPolygon("ring.obj", new Vector3D(1.5, -1.3, 5),
+				new LambertMat(Color.BLUE, 0, 5.0, 0.1f)));
 		
 		/** Fourth Showroom **/
 		scene02.addLight(new PointLight(new Vector3D(-1.5, 1, 5), new LambertMat(Color.WHITE, 200, 0, 0)));
 		scene02.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(-1.5, -2.4, 5),
 				new LambertMat(Color.ORANGE, 0.0, 5.0, 0.1f)));
-		
+		scene02.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(-1.5, -1.3 , 5),
+				new LambertMat(Color.WHITE, 0.0, 5.0, 0.1f)));
 		
 		// Scene Objects
 		
