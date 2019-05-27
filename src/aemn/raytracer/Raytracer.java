@@ -13,6 +13,7 @@ import aemn.material.LambertMat;
 import aemn.material.MaterialShader;
 import aemn.material.ReflectiveMat;
 import aemn.material.RefractiveMat;
+import aemn.raytracer.lights.DirectionalLight;
 import aemn.raytracer.lights.Light;
 import aemn.raytracer.lights.PointLight;
 import aemn.raytracer.objects.Camera;
@@ -35,7 +36,7 @@ public class Raytracer {
 		float version = 1.1f;
 		System.out.println("AEMN -> Raytracer v" + version);
 		System.out.println(new Date());
-		 
+
 		/** Scene 01 **/
 		Scene scene01 = new Scene();
 		scene01.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 0f, 50f));
@@ -50,71 +51,74 @@ public class Raytracer {
 				new ReflectiveMat(Color.WHITE, 0, 5, 0.1f)));
 		// Scene Objects
 		scene01.addObject(new Sphere(new Vector3D(-4.0, 0.0, 4), 2.5, new ReflectiveMat(Color.PINK, 0, 1000, 0.5f)));
-		scene01.addObject(new Sphere(new Vector3D(2.0, -2.0, 1.5), 0.3, new ReflectiveMat(Color.WHITE, 0, 50, 0.5f)));
+		scene01.addObject(new Sphere(new Vector3D(2.0, -2.0, 1.5), 0.3, new ReflectiveMat(Color.RED, 0, 50, 0.5f)));
 		/****************** SCENE FINISH ****************/
 
-		/**************** Scene 02****************/
+		/**************** Scene 02 ****************/
 		// Scene Configuration
 
 		Scene scene02 = new Scene();
 		scene02.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 0f, 50f));
 
 		// Scene OBJs
-		scene02.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 1),
-				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
-		scene02.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 5.4),
-				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
-		
+		scene02.addObject(
+				OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 1), new LambertMat(Color.WHITE, 0, 5, 0.1f)));
+		scene02.addObject(
+				OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 5.4), new LambertMat(Color.WHITE, 0, 5, 0.1f)));
+
 		/** First Showroom **/
 		scene02.addLight(new PointLight(new Vector3D(-1.5, 1, 0), new LambertMat(Color.WHITE, 200, 0, 0)));
 		scene02.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(-1.5, -2.4, 0),
 				new ReflectiveMat(Color.YELLOW, 0.0, 5.0, 0.1f)));
 		scene02.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(-1.5, -1.4, 0),
 				new RefractiveMat(Color.WHITE, 0.0, 10.0, 0.05f, 1.5)));
-		
+
 		/** Second Showroom **/
 		scene02.addLight(new PointLight(new Vector3D(1.5, 1.0, 0.0), new LambertMat(Color.WHITE, 200, 0, 0)));
 		scene02.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(1.5, -2.4, 0),
 				new RefractiveMat(Color.WHITE, 0, 5.0, 0.1f, 1.5)));
-		scene02.addObject(new Sphere(new Vector3D(1.5, -0.8, 0), 0.6, new RefractiveMat(Color.WHITE, 0, 150, 0.05f, 1.5)));
-		
+		scene02.addObject(
+				new Sphere(new Vector3D(1.5, -0.8, 0), 0.6, new RefractiveMat(Color.WHITE, 0, 150, 0.05f, 1.5)));
+
 		/** Third Showroom **/
 		scene02.addLight(new PointLight(new Vector3D(1.5, 1.0, 5), new LambertMat(Color.WHITE, 200, 0, 0)));
 		scene02.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(1.5, -2.4, 5),
 				new LambertMat(Color.ORANGE, 0, 5.0, 0.1f)));
-		scene02.addObject(OBJReader.GetPolygon("ring.obj", new Vector3D(1.5, -1.3, 5),
-				new LambertMat(Color.BLUE, 0, 5.0, 0.1f)));
-		
+		scene02.addObject(
+				OBJReader.GetPolygon("ring.obj", new Vector3D(1.5, -1.3, 5), new LambertMat(Color.BLUE, 0, 5.0, 0.1f)));
+
 		/** Fourth Showroom **/
 		scene02.addLight(new PointLight(new Vector3D(-1.5, 1, 5), new LambertMat(Color.WHITE, 200, 0, 0)));
 		scene02.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(-1.5, -2.4, 5),
 				new LambertMat(Color.ORANGE, 0.0, 5.0, 0.1f)));
-		scene02.addObject(OBJReader.GetPolygon("plant.obj", new Vector3D(-1.5, -1.45 , 5),
+		scene02.addObject(OBJReader.GetPolygon("plant.obj", new Vector3D(-1.5, -1.45, 5),
 				new ReflectiveMat(Color.GREEN, 0.0, 5.0, 0.1f)));
-		
+
 		/****************** SCENE FINISH ****************/
-		
+
 		/**************** Scene 03 ****************/
 		// Scene Configuration
 		Scene scene03 = new Scene();
 		scene03.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 0f, 50f));
 		scene03.addLight(new PointLight(new Vector3D(0, 1, 0), new LambertMat(Color.WHITE, 300, 0, 0)));
 		scene03.addLight(new PointLight(new Vector3D(0, 1, 5), new LambertMat(Color.WHITE, 300, 0, 0)));
-		
+
 		// Scene OBJs
-		scene03.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 1),
-				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
-		scene03.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 5.5),
-				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
-		
+		scene03.addObject(
+				OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 1), new LambertMat(Color.WHITE, 0, 5, 0.1f)));
+		scene03.addObject(
+				OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 5.5), new LambertMat(Color.WHITE, 0, 5, 0.1f)));
+
 		scene03.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(0, -2.4, 1),
 				new RefractiveMat(Color.WHITE, 0, 50, 0.1f, 1.5)));
-		/*scene03.addObject(OBJReader.GetPolygon("bunny.obj", new Vector3D(0, -1.6, 1),
-				new LambertMat(Color.PINK, 0, 150, 0.1f)));*/
+		/*
+		 * scene03.addObject(OBJReader.GetPolygon("bunny.obj", new Vector3D(0, -1.6, 1),
+		 * new LambertMat(Color.PINK, 0, 150, 0.1f)));
+		 */
 		scene03.addObject(new Sphere(new Vector3D(-0.5, -2, 3), 0.6, new ReflectiveMat(Color.RED, 0, 15, 0.1f)));
 		scene03.addObject(new Sphere(new Vector3D(-2, -2, 2), 0.6, new ReflectiveMat(Color.BLUE, 0, 15, 0.1f)));
 		scene03.addObject(new Sphere(new Vector3D(-1.5, -2, 4), 0.6, new ReflectiveMat(Color.YELLOW, 0, 20, 0.05f)));
-		
+
 		/****************** SCENE FINISH ****************/
 
 		BufferedImage image = raytrace(scene01);
@@ -204,93 +208,42 @@ public class Raytracer {
 						/***
 						 * Reflection and Refraction
 						 */
-						if (closestIntersection.getObject().getShader() instanceof ReflectiveMat) {
+						if (closestIntersection.getObject().getShader() instanceof ReflectiveMat) { // REFLECTION START
 							Intersection resultIntersection = reflection(closestIntersection, light, objects,
 									mainCamera);
-
+							Light templight = null;
+							
 							if (resultIntersection != null) {
 								
-								/*if (resultIntersection.getObject().getShader() instanceof ReflectiveMat) {
-									resultIntersection = reflection(resultIntersection, light, objects, mainCamera);
-									if (resultIntersection != null) {
-										newRGB = MaterialShader.calculateNewColors(light,
-												resultIntersection, mainCamera, ambient, specular, smooth);
-									} 
-									
-								} else if (resultIntersection.getObject().getShader() instanceof RefractiveMat) {
-									resultIntersection = refraction(resultIntersection, light, objects, mainCamera);
-									if (resultIntersection != null) {
-										newRGB = MaterialShader.calculateNewColors(light,
-												resultIntersection, mainCamera, ambient, specular, smooth);
-									} 
-									
-								} else if (resultIntersection.getObject().getShader() instanceof LambertMat) {
-									if (resultIntersection != null) {
-										newRGB = MaterialShader.calculateNewColors(light,
-												resultIntersection, mainCamera, ambient, specular, smooth);
-									} 
-								}
-								*/
-								
-								if (resultIntersection.getObject().getShader() instanceof RefractiveMat) {
-
-									resultIntersection = refraction(resultIntersection, light, objects,
-											mainCamera);
-
-									if (resultIntersection != null) {
-
-										if (resultIntersection.getObject().getShader() instanceof ReflectiveMat) {
-											
-											resultIntersection = reflection(resultIntersection, light, objects,
-													mainCamera);
-											if (resultIntersection != null) {
-												newRGB = MaterialShader.calculateNewColors(light,
-														resultIntersection, mainCamera, ambient, specular, smooth);
-											} 
-											
-										} else {
-											newRGB = MaterialShader.calculateNewColors(light, resultIntersection,
-													mainCamera, ambient, specular, smooth);
-										}
-									}
-									
-								
-								} else {
-									newRGB = MaterialShader.calculateNewColors(light, resultIntersection,
-											mainCamera, ambient, specular, smooth);
+								if(light instanceof PointLight) {
+									templight = new PointLight(light.getPosition(), new LambertMat(closestIntersection.getObject().getShader().getColor(), light.getShader().getIntensity(), 0, 0));
+								} else if(light instanceof DirectionalLight) {
+									templight = new DirectionalLight(light.getPosition(), ((DirectionalLight) light).getDirection(), new LambertMat(closestIntersection.getObject().getShader().getColor(), light.getShader().getIntensity(), 0, 0));
 								}
 								
-								//Color combination
-								//pixelColor = closestIntersection.getObject().getShader().getColor();
+								newRGB = MaterialShader.calculateNewColors(templight, resultIntersection, mainCamera,
+										ambient, specular, smooth);
 							}
+
 							Color newCol = new Color(clamp(newRGB[0], 0, 1), clamp(newRGB[1], 0, 1),
 									clamp(newRGB[2], 0, 1));
 							pixelColor = addColor(pixelColor, newCol);
 
-						} else if (closestIntersection.getObject().getShader() instanceof RefractiveMat) {
+						} else if (closestIntersection.getObject().getShader() instanceof RefractiveMat) { //REFRACTION START
 							Intersection resultIntersection = refraction(closestIntersection, light, objects,
 									mainCamera);
-							if (resultIntersection != null) {
-								if (resultIntersection.getObject().getShader() instanceof ReflectiveMat) {
-									resultIntersection = reflection(resultIntersection, light, objects, mainCamera);
-									if (resultIntersection != null) {
-										newRGB = MaterialShader.calculateNewColors(light,
-												resultIntersection, mainCamera, ambient, specular, smooth);
-									} 
-									
-								} else if (resultIntersection.getObject().getShader() instanceof RefractiveMat) {
-									resultIntersection = refraction(resultIntersection, light, objects, mainCamera);
-									if (resultIntersection != null) {
-										newRGB = MaterialShader.calculateNewColors(light,
-												resultIntersection, mainCamera, ambient, specular, smooth);
-									} 
-									
-								} else if (resultIntersection.getObject().getShader() instanceof LambertMat) {
-									if (resultIntersection != null) {
-										newRGB = MaterialShader.calculateNewColors(light,
-												resultIntersection, mainCamera, ambient, specular, smooth);
-									} 
+							Light templight = null;
+							
+							if(resultIntersection != null) {
+								
+								if(light instanceof PointLight) {
+									templight = new PointLight(light.getPosition(), new LambertMat(closestIntersection.getObject().getShader().getColor(), light.getShader().getIntensity(), 0, 0));
+								} else if(light instanceof DirectionalLight) {
+									templight = new DirectionalLight(light.getPosition(), ((DirectionalLight) light).getDirection(), new LambertMat(closestIntersection.getObject().getShader().getColor(), light.getShader().getIntensity(), 0, 0));
 								}
+								
+								newRGB = MaterialShader.calculateNewColors(templight, resultIntersection, mainCamera,
+										ambient, specular, smooth);
 							}
 							
 							Color newCol = new Color(clamp(newRGB[0], 0, 1), clamp(newRGB[1], 0, 1),
@@ -365,7 +318,7 @@ public class Raytracer {
 			double b = 1.5;
 			Vector3D bias = Vector3D.scalarMultiplication(N, b);
 			double fresnel = Math.pow((IndexOfRefraction - 1), 2) / Math.pow((IndexOfRefraction + 1), 2);
-			if(fresnel > 0) {
+			if (fresnel > 0) {
 				intersectionNewPos = Vector3D.add(closestIntersection.getPosition(), bias);
 			} else {
 				intersectionNewPos = Vector3D.substract(closestIntersection.getPosition(), bias);
@@ -373,9 +326,9 @@ public class Raytracer {
 		} else {
 			intersectionNewPos = closestIntersection.getPosition();
 		}
-		
+
 		Vector3D I = Vector3D.substract(intersectionNewPos, mainCamera.getPosition());
-		
+
 		double IdotN = Vector3D.dotProduct(I, N);
 		Vector3D T = null;
 
@@ -405,9 +358,7 @@ public class Raytracer {
 		}
 
 		Vector3D refractedVector = T;
-		
-		
-		
+
 		Ray refractedRay = new Ray(intersectionNewPos, refractedVector);
 		Intersection refractedIntersection = raycast(refractedRay, objects, closestIntersection.getObject(), null);
 
