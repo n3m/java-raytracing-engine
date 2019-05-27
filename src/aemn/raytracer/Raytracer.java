@@ -35,8 +35,8 @@ public class Raytracer {
 	public static void main(String[] args) {
 		float version = 1.1f;
 		System.out.println("AEMN -> Raytracer v" + version);
-		System.out.println(new Date());
-		int def_size = 1200; 
+		//System.out.println(new Date());
+		int def_size = 1200;
 
 		/** Scene 01 **/
 		Scene scene01 = new Scene();
@@ -47,9 +47,8 @@ public class Raytracer {
 
 		scene01.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(0, -2.5, 1.5),
 				new ReflectiveMat(Color.ORANGE, 0, 5, 0.1f)));
-
-		scene01.addObject(
-				OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 1), new LambertMat(Color.WHITE, 0, 5, 0.1f)));
+		scene01.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 1.0),
+				new ReflectiveMat(Color.WHITE, 0, 5, 0.1f)));
 		scene01.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 5.55),
 				new ReflectiveMat(Color.WHITE, 0, 5, 0.1f)));
 
@@ -63,8 +62,8 @@ public class Raytracer {
 		scene01.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(-4.55, -2.5, 5.55),
 				new ReflectiveMat(Color.WHITE, 0, 5, 0.1f)));
 		scene01.addObject(
-				OBJReader.GetPolygon("venus.obj", new Vector3D(2, -2.5, 4), new LambertMat(Color.MAGENTA, 0, 5, 0.1f)));
-		// Scene Objects
+				OBJReader.GetPolygon("venus.obj", new Vector3D(1, -2.5, 4), new RefractiveMat(Color.WHITE, 0, 150, 0.1f, 1.5)));
+		/* Scene Objects */
 		scene01.addObject(new Sphere(new Vector3D(-4.0, 0.0, 4), 2.5, new ReflectiveMat(Color.PINK, 0, 1000, 0.5f)));
 		scene01.addObject(new Sphere(new Vector3D(2.0, -2.0, 1.5), 0.3, new ReflectiveMat(Color.RED, 0, 50, 0.5f)));
 		/****************** SCENE FINISH ****************/
@@ -168,17 +167,26 @@ public class Raytracer {
 				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
 		scene04.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(-4.55, -2.5, 5.55),
 				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
-		scene04.addObject(OBJReader.GetPolygon("bigCube.obj", new Vector3D(0, -2.4, 1),
-				
+		scene04.addObject(OBJReader.GetPolygon("atenea.obj", new Vector3D(0, -2.4, 1),
 				new RefractiveMat(Color.WHITE, 0, 75, 0.01f, 1.5)));
 		scene04.addObject(new Sphere(new Vector3D(-2, -1, 0), 0.4, new ReflectiveMat(Color.RED, 0, 25, 0.1f)));
 		scene04.addObject(new Sphere(new Vector3D(2, -1, 0), 0.4, new ReflectiveMat(Color.PINK, 0, 25, 0.1f)));
 		/****************** SCENE FINISH ****************/
-		
+		System.out.println(new Date());
 		BufferedImage image = raytrace(scene01);
 		File outputImage = new File("scene01_FinalVersion.png");
 		try {
 			ImageIO.write(image, "png", outputImage);
+		} catch (IOException ex) {
+			System.out.println("Something failed");
+		}
+		System.out.println(new Date());
+		System.out.println("Second Render");
+		System.out.println(new Date());
+		BufferedImage image2 = raytrace(scene04);
+		File outputImage2 = new File("scene04_test.png");
+		try {
+			ImageIO.write(image2, "png", outputImage2);
 		} catch (IOException ex) {
 			System.out.println("Something failed");
 		}
@@ -302,30 +310,32 @@ public class Raytracer {
 									}
 									newRGB = MaterialShader.calculateNewColors(secondLight, secondREC, mainCamera,
 											ambient, specular, smooth);
-									
-									//TEMP ADD
+
+									// TEMP ADD
 									Ray shadowRay = new Ray(secondREC.getPosition(), secondLight.getPosition());
 									Intersection shadowIntersection = raycast(shadowRay, objects, secondREC.getObject(),
 											null);
 
 									Color diffuse = Color.black;
 									if (shadowIntersection == null) {
-										diffuse = new Color(clamp(newRGB[0], 0, 1), clamp(newRGB[1], 0, 1), clamp(newRGB[2], 0, 1));
+										diffuse = new Color(clamp(newRGB[0], 0, 1), clamp(newRGB[1], 0, 1),
+												clamp(newRGB[2], 0, 1));
 									}
 									pixelColor = addColor(pixelColor, diffuse);
 									//
 								} else {
 									newRGB = MaterialShader.calculateNewColors(templight, resultIntersection,
 											mainCamera, ambient, specular, smooth);
-									
+
 									// TEMP ADd
 									Ray shadowRay = new Ray(resultIntersection.getPosition(), templight.getPosition());
-									Intersection shadowIntersection = raycast(shadowRay, objects, resultIntersection.getObject(),
-											null);
+									Intersection shadowIntersection = raycast(shadowRay, objects,
+											resultIntersection.getObject(), null);
 
 									Color diffuse = Color.black;
 									if (shadowIntersection == null) {
-										diffuse = new Color(clamp(newRGB[0], 0, 1), clamp(newRGB[1], 0, 1), clamp(newRGB[2], 0, 1));
+										diffuse = new Color(clamp(newRGB[0], 0, 1), clamp(newRGB[1], 0, 1),
+												clamp(newRGB[2], 0, 1));
 									}
 									pixelColor = addColor(pixelColor, diffuse);
 									//
@@ -377,15 +387,16 @@ public class Raytracer {
 									}
 									newRGB = MaterialShader.calculateNewColors(secondLight, secondREC, mainCamera,
 											ambient, specular, smooth);
-									
-									//TEMP ADD
+
+									// TEMP ADD
 									Ray shadowRay = new Ray(secondREC.getPosition(), secondLight.getPosition());
 									Intersection shadowIntersection = raycast(shadowRay, objects, secondREC.getObject(),
 											null);
 
 									Color diffuse = Color.black;
 									if (shadowIntersection == null) {
-										diffuse = new Color(clamp(newRGB[0], 0, 1), clamp(newRGB[1], 0, 1), clamp(newRGB[2], 0, 1));
+										diffuse = new Color(clamp(newRGB[0], 0, 1), clamp(newRGB[1], 0, 1),
+												clamp(newRGB[2], 0, 1));
 									}
 									pixelColor = addColor(pixelColor, diffuse);
 									//
@@ -394,12 +405,13 @@ public class Raytracer {
 											mainCamera, ambient, specular, smooth);
 									// TEMP ADd
 									Ray shadowRay = new Ray(resultIntersection.getPosition(), templight.getPosition());
-									Intersection shadowIntersection = raycast(shadowRay, objects, resultIntersection.getObject(),
-											null);
+									Intersection shadowIntersection = raycast(shadowRay, objects,
+											resultIntersection.getObject(), null);
 
 									Color diffuse = Color.black;
 									if (shadowIntersection == null) {
-										diffuse = new Color(clamp(newRGB[0], 0, 1), clamp(newRGB[1], 0, 1), clamp(newRGB[2], 0, 1));
+										diffuse = new Color(clamp(newRGB[0], 0, 1), clamp(newRGB[1], 0, 1),
+												clamp(newRGB[2], 0, 1));
 									}
 									pixelColor = addColor(pixelColor, diffuse);
 									//
