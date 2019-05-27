@@ -6,8 +6,8 @@ Objects:
 	- Plane (Floor)
 	
 Render Time:
-	Sun May 26 21:09:29 CDT 2019 -> Sun May 26 21:19:45 CDT 2019
-	-> 10 minutes and 16 seconds
+	### -> ###
+	-> ###
 
 /*** SCENE 02 ***/
 Objects:
@@ -21,5 +21,5 @@ Objects:
 	- Plane (Floor)
 	
 Render Time:
-	Sun May 26 20:51:35 CDT 2019 -> Sun May 26 20:59:25 CDT 2019
-	-> 7 minutes and 50 seconds
+	Sun May 26 22:33:34 CDT 2019 -> Sun May 26 22:52:18 CDT 2019
+	-> 0 hours, 18 minutes and 44 seconds
