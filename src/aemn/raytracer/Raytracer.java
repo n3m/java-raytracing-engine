@@ -47,10 +47,22 @@ public class Raytracer {
 		scene01.addObject(OBJReader.GetPolygon("smallTeapot.obj", new Vector3D(0, -2.5, 1.5),
 				new ReflectiveMat(Color.ORANGE, 0, 5, 0.1f)));
 
-		scene01.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 1.5),
-				new ReflectiveMat(Color.WHITE, 0, 5, 0.1f)));
 		scene01.addObject(
-				OBJReader.GetPolygon("venus.obj", new Vector3D(4, -2.5, 4), new LambertMat(Color.ORANGE, 0, 5, 0.1f)));
+				OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 1), new LambertMat(Color.WHITE, 0, 5, 0.1f)));
+		scene01.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 5.55),
+				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
+
+		scene01.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(4.55, -2.5, 1),
+				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
+		scene01.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(4.55, -2.5, 5.55),
+				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
+
+		scene01.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(-4.55, -2.5, 1),
+				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
+		scene01.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(-4.55, -2.5, 5.55),
+				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
+		scene01.addObject(
+				OBJReader.GetPolygon("venus.obj", new Vector3D(2, -2.5, 4), new LambertMat(Color.MAGENTA, 0, 5, 0.1f)));
 		// Scene Objects
 		scene01.addObject(new Sphere(new Vector3D(-4.0, 0.0, 4), 2.5, new ReflectiveMat(Color.PINK, 0, 1000, 0.5f)));
 		scene01.addObject(new Sphere(new Vector3D(2.0, -2.0, 1.5), 0.3, new ReflectiveMat(Color.RED, 0, 50, 0.5f)));
@@ -140,15 +152,26 @@ public class Raytracer {
 		scene04.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 0f, 50f));
 		scene04.addLight(new PointLight(new Vector3D(-2, 1, 0), new LambertMat(Color.WHITE, 300, 0, 0)));
 		scene04.addLight(new PointLight(new Vector3D(2, 1, 0), new LambertMat(Color.WHITE, 300, 0, 0)));
-		
+
 		scene04.addObject(
 				OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 1), new LambertMat(Color.WHITE, 0, 5, 0.1f)));
 		scene04.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 5.55),
 				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
+
+		scene04.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(4.55, -2.5, 1),
+				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
+		scene04.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(4.55, -2.5, 5.55),
+				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
+
+		scene04.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(-4.55, -2.5, 1),
+				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
+		scene04.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(-4.55, -2.5, 5.55),
+				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
 		scene04.addObject(OBJReader.GetPolygon("bigCube.obj", new Vector3D(0, -2.4, 1),
+				
 				new RefractiveMat(Color.WHITE, 0, 75, 0.01f, 1.5)));
-		scene03.addObject(new Sphere(new Vector3D(-1, 0, 1), 0.4, new ReflectiveMat(Color.RED, 0, 25, 0.1f)));
-		scene03.addObject(new Sphere(new Vector3D(1, 0, 1), 0.4, new ReflectiveMat(Color.PINK, 0, 25, 0.1f)));
+		scene04.addObject(new Sphere(new Vector3D(-2, -1, 0), 0.4, new ReflectiveMat(Color.RED, 0, 25, 0.1f)));
+		scene04.addObject(new Sphere(new Vector3D(2, -1, 0), 0.4, new ReflectiveMat(Color.PINK, 0, 25, 0.1f)));
 
 		BufferedImage image = raytrace(scene01);
 		File outputImage = new File("scene01_test.png");
@@ -277,9 +300,33 @@ public class Raytracer {
 									}
 									newRGB = MaterialShader.calculateNewColors(secondLight, secondREC, mainCamera,
 											ambient, specular, smooth);
+									
+									//TEMP ADD
+									Ray shadowRay = new Ray(secondREC.getPosition(), secondLight.getPosition());
+									Intersection shadowIntersection = raycast(shadowRay, objects, secondREC.getObject(),
+											null);
+
+									Color diffuse = Color.black;
+									if (shadowIntersection == null) {
+										diffuse = new Color(clamp(newRGB[0], 0, 1), clamp(newRGB[1], 0, 1), clamp(newRGB[2], 0, 1));
+									}
+									pixelColor = addColor(pixelColor, diffuse);
+									//
 								} else {
 									newRGB = MaterialShader.calculateNewColors(templight, resultIntersection,
 											mainCamera, ambient, specular, smooth);
+									
+									// TEMP ADd
+									Ray shadowRay = new Ray(resultIntersection.getPosition(), templight.getPosition());
+									Intersection shadowIntersection = raycast(shadowRay, objects, resultIntersection.getObject(),
+											null);
+
+									Color diffuse = Color.black;
+									if (shadowIntersection == null) {
+										diffuse = new Color(clamp(newRGB[0], 0, 1), clamp(newRGB[1], 0, 1), clamp(newRGB[2], 0, 1));
+									}
+									pixelColor = addColor(pixelColor, diffuse);
+									//
 								}
 
 							}
@@ -328,9 +375,32 @@ public class Raytracer {
 									}
 									newRGB = MaterialShader.calculateNewColors(secondLight, secondREC, mainCamera,
 											ambient, specular, smooth);
+									
+									//TEMP ADD
+									Ray shadowRay = new Ray(secondREC.getPosition(), secondLight.getPosition());
+									Intersection shadowIntersection = raycast(shadowRay, objects, secondREC.getObject(),
+											null);
+
+									Color diffuse = Color.black;
+									if (shadowIntersection == null) {
+										diffuse = new Color(clamp(newRGB[0], 0, 1), clamp(newRGB[1], 0, 1), clamp(newRGB[2], 0, 1));
+									}
+									pixelColor = addColor(pixelColor, diffuse);
+									//
 								} else {
 									newRGB = MaterialShader.calculateNewColors(templight, resultIntersection,
 											mainCamera, ambient, specular, smooth);
+									// TEMP ADd
+									Ray shadowRay = new Ray(resultIntersection.getPosition(), templight.getPosition());
+									Intersection shadowIntersection = raycast(shadowRay, objects, resultIntersection.getObject(),
+											null);
+
+									Color diffuse = Color.black;
+									if (shadowIntersection == null) {
+										diffuse = new Color(clamp(newRGB[0], 0, 1), clamp(newRGB[1], 0, 1), clamp(newRGB[2], 0, 1));
+									}
+									pixelColor = addColor(pixelColor, diffuse);
+									//
 								}
 
 							}
