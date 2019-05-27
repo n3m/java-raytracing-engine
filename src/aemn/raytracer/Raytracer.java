@@ -39,7 +39,7 @@ public class Raytracer {
 
 		/** Scene 01 **/
 		Scene scene01 = new Scene();
-		scene01.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 800, 800, 0f, 50f));
+		scene01.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, 1200, 1200, 0f, 50f));
 		scene01.addLight(new PointLight(new Vector3D(-3, 2.0, 0), new LambertMat(Color.WHITE, 500, 0, 0)));
 		scene01.addLight(new PointLight(new Vector3D(5, 2.0, 0), new LambertMat(Color.WHITE, 500, 0, 0)));
 		// Scene OBJs
@@ -209,43 +209,82 @@ public class Raytracer {
 						 * Reflection and Refraction
 						 */
 						if (closestIntersection.getObject().getShader() instanceof ReflectiveMat) { // REFLECTION START
+
 							Intersection resultIntersection = reflection(closestIntersection, light, objects,
 									mainCamera);
 							Light templight = null;
-							
+							Light secondLight = null;
+
 							if (resultIntersection != null) {
-								
-								if(light instanceof PointLight) {
-									templight = new PointLight(light.getPosition(), new LambertMat(closestIntersection.getObject().getShader().getColor(), light.getShader().getIntensity(), 0, 0));
-								} else if(light instanceof DirectionalLight) {
-									templight = new DirectionalLight(light.getPosition(), ((DirectionalLight) light).getDirection(), new LambertMat(closestIntersection.getObject().getShader().getColor(), light.getShader().getIntensity(), 0, 0));
+
+								if (light instanceof PointLight) {
+									templight = new PointLight(light.getPosition(),
+											new LambertMat(closestIntersection.getObject().getShader().getColor(),
+													light.getShader().getIntensity(), 0, 0));
+								} else if (light instanceof DirectionalLight) {
+									templight = new DirectionalLight(light.getPosition(),
+											((DirectionalLight) light).getDirection(),
+											new LambertMat(closestIntersection.getObject().getShader().getColor(),
+													light.getShader().getIntensity(), 0, 0));
 								}
 								
-								newRGB = MaterialShader.calculateNewColors(templight, resultIntersection, mainCamera,
-										ambient, specular, smooth);
+								Intersection secondREC = null;
+								if (resultIntersection.getObject().getShader() instanceof ReflectiveMat) {
+									secondREC = reflection(resultIntersection, templight, objects,
+											mainCamera);
+								} else if (resultIntersection.getObject()
+										.getShader() instanceof RefractiveMat) {
+									secondREC = refraction(resultIntersection, templight, objects,
+											mainCamera);
+								}			
+								
+								if(secondREC != null) {
+									if (light instanceof PointLight) {
+										secondLight = new PointLight(light.getPosition(),
+												new LambertMat(resultIntersection.getObject().getShader().getColor(),
+														light.getShader().getIntensity(), 0, 0));
+									} else if (light instanceof DirectionalLight) {
+										secondLight = new DirectionalLight(light.getPosition(),
+												((DirectionalLight) light).getDirection(),
+												new LambertMat(resultIntersection.getObject().getShader().getColor(),
+														light.getShader().getIntensity(), 0, 0));
+									}
+									newRGB = MaterialShader.calculateNewColors(secondLight, secondREC, mainCamera,
+											ambient, specular, smooth);
+								} else {
+									newRGB = MaterialShader.calculateNewColors(templight, resultIntersection, mainCamera,
+											ambient, specular, smooth);
+								}
+								
 							}
 
 							Color newCol = new Color(clamp(newRGB[0], 0, 1), clamp(newRGB[1], 0, 1),
 									clamp(newRGB[2], 0, 1));
 							pixelColor = addColor(pixelColor, newCol);
 
-						} else if (closestIntersection.getObject().getShader() instanceof RefractiveMat) { //REFRACTION START
+						} else if (closestIntersection.getObject().getShader() instanceof RefractiveMat) { // REFRACTION
+																											// START
 							Intersection resultIntersection = refraction(closestIntersection, light, objects,
 									mainCamera);
 							Light templight = null;
-							
-							if(resultIntersection != null) {
-								
-								if(light instanceof PointLight) {
-									templight = new PointLight(light.getPosition(), new LambertMat(closestIntersection.getObject().getShader().getColor(), light.getShader().getIntensity(), 0, 0));
-								} else if(light instanceof DirectionalLight) {
-									templight = new DirectionalLight(light.getPosition(), ((DirectionalLight) light).getDirection(), new LambertMat(closestIntersection.getObject().getShader().getColor(), light.getShader().getIntensity(), 0, 0));
+
+							if (resultIntersection != null) {
+
+								if (light instanceof PointLight) {
+									templight = new PointLight(light.getPosition(),
+											new LambertMat(closestIntersection.getObject().getShader().getColor(),
+													light.getShader().getIntensity(), 0, 0));
+								} else if (light instanceof DirectionalLight) {
+									templight = new DirectionalLight(light.getPosition(),
+											((DirectionalLight) light).getDirection(),
+											new LambertMat(closestIntersection.getObject().getShader().getColor(),
+													light.getShader().getIntensity(), 0, 0));
 								}
-								
+
 								newRGB = MaterialShader.calculateNewColors(templight, resultIntersection, mainCamera,
 										ambient, specular, smooth);
 							}
-							
+
 							Color newCol = new Color(clamp(newRGB[0], 0, 1), clamp(newRGB[1], 0, 1),
 									clamp(newRGB[2], 0, 1));
 							pixelColor = addColor(pixelColor, newCol);
@@ -270,6 +309,7 @@ public class Raytracer {
 				}
 				image.setRGB(i, j, pixelColor.getRGB());
 			}
+
 		}
 
 		return image;
