@@ -35,7 +35,7 @@ public class Raytracer {
 	public static void main(String[] args) {
 		float version = 1.1f;
 		System.out.println("AEMN -> Raytracer v" + version);
-		// System.out.println(new Date());
+		System.out.println(new Date());
 		int def_size = 1200;
 
 		/** Scene 01 **/
@@ -76,10 +76,20 @@ public class Raytracer {
 		scene02.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, def_size, def_size, 0f, 50f));
 
 		// Scene OBJs
-		scene02.addObject(
-				OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 1), new LambertMat(Color.WHITE, 0, 5, 0.1f)));
-		scene02.addObject(
-				OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 5.4), new LambertMat(Color.WHITE, 0, 5, 0.1f)));
+		scene02.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0.0, -2.5, 1.0),
+				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
+		scene02.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 5.55),
+				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
+		scene02.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(4.55, -2.5, 1),
+				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
+		scene02.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(4.55, -2.5, 5.55),
+				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
+		scene02.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(-4.55, -2.5, 1),
+				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
+		scene02.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(-4.55, -2.5, 5.55),
+				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
+		scene02.addObject(OBJReader.GetPolygon("vertPanel2.obj", new Vector3D(0.0, -3, 7),
+				new ReflectiveMat(Color.GRAY, 0, 5, 0.1f)));
 
 		/** First Showroom **/
 		scene02.addLight(new PointLight(new Vector3D(-1.5, 1, 0), new LambertMat(Color.WHITE, 200, 0, 0)));
@@ -96,18 +106,22 @@ public class Raytracer {
 				new Sphere(new Vector3D(1.5, -0.8, 0), 0.6, new RefractiveMat(Color.WHITE, 0, 150, 0.05f, 1.5)));
 
 		/** Third Showroom **/
-		scene02.addLight(new PointLight(new Vector3D(1.5, 1.0, 5), new LambertMat(Color.WHITE, 200, 0, 0)));
+		//scene02.addLight(new PointLight(new Vector3D(1.5, 1.0, 5), new LambertMat(Color.WHITE, 200, 0, 0)));
 		scene02.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(1.5, -2.4, 5),
 				new LambertMat(Color.ORANGE, 0, 5.0, 0.1f)));
 		scene02.addObject(
 				OBJReader.GetPolygon("ring.obj", new Vector3D(1.5, -1.3, 5), new LambertMat(Color.BLUE, 0, 5.0, 0.1f)));
 
 		/** Fourth Showroom **/
-		scene02.addLight(new PointLight(new Vector3D(-1.5, 1, 5), new LambertMat(Color.WHITE, 200, 0, 0)));
+		//scene02.addLight(new PointLight(new Vector3D(-1.5, 1, 5), new LambertMat(Color.WHITE, 200, 0, 0)));
 		scene02.addObject(OBJReader.GetPolygon("Cube.obj", new Vector3D(-1.5, -2.4, 5),
 				new LambertMat(Color.ORANGE, 0.0, 5.0, 0.1f)));
 		scene02.addObject(OBJReader.GetPolygon("plant.obj", new Vector3D(-1.5, -1.45, 5),
 				new ReflectiveMat(Color.GREEN, 0.0, 5.0, 0.1f)));
+		
+		/** OTHER **/
+		scene02.addObject(OBJReader.GetPolygon("atenea.obj", new Vector3D(0, -2.4, 3),
+				new ReflectiveMat(Color.PINK, 0.0, 50, 0.1f)));
 
 		/****************** SCENE FINISH ****************/
 
@@ -167,7 +181,7 @@ public class Raytracer {
 		/*
 		 * scene04.addObject(OBJReader.GetPolygon("atenea.obj", new Vector3D(0, -2.4,
 		 * 1), new RefractiveMat(Color.WHITE, 0, 75, 0.01f, 1.5)));
-		 */
+		 *//*
 		scene04.addObject(OBJReader.GetPolygon("bigBar.obj", new Vector3D(0, -2, 6),
 				new ReflectiveMat(Color.GREEN, 0, 75, 0.01f)));
 		scene04.addObject(OBJReader.GetPolygon("bigBar.obj", new Vector3D(0, -1, 6),
@@ -178,7 +192,7 @@ public class Raytracer {
 				new ReflectiveMat(Color.LIGHT_GRAY, 0, 75, 0.01f)));
 		scene04.addObject(
 				OBJReader.GetPolygon("bigBar.obj", new Vector3D(0, 2.0, 6.0), new ReflectiveMat(Color.CYAN, 0, 75, 0.01f)));
-
+			*/
 		scene04.addObject(new Sphere(new Vector3D(-2, -1, 0), 0.4, new ReflectiveMat(Color.RED, 0, 25, 0.1f)));
 		scene04.addObject(new Sphere(new Vector3D(2, -1, 0), 0.4, new ReflectiveMat(Color.PINK, 0, 25, 0.1f)));
 		/****************** SCENE FINISH ****************/
@@ -188,12 +202,13 @@ public class Raytracer {
 		Scene scene05 = new Scene();
 		scene05.setCamera(new Camera(new Vector3D(0, 0, -8), 160, 160, def_size, def_size, 0f, 50f));
 		scene05.addLight(new PointLight(new Vector3D(0, 2, 0), new LambertMat(Color.WHITE, 300, 0, 0)));
-		scene05.addLight(new PointLight(new Vector3D(4, 2, 3), new LambertMat(Color.WHITE, 400, 0, 0)));
-		scene05.addLight(new PointLight(new Vector3D(-4, 2, 3), new LambertMat(Color.WHITE, 400, 0, 0)));
-		scene05.addObject(OBJReader.GetPolygon("vertPanel2.obj", new Vector3D(0.0, -1, 1.0),
+
+		scene05.addObject(OBJReader.GetPolygon("vertPanel2.obj", new Vector3D(0.0, -3, 6),
 				new ReflectiveMat(Color.CYAN, 0, 5, 0.1f)));
+		scene04.addObject(
+				OBJReader.GetPolygon("bigBar.obj", new Vector3D(0, -3, 5), new ReflectiveMat(Color.GRAY, 0, 5, 0.01f)));
 		scene05.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0.0, -2.5, 1.0),
-				new LambertMat(Color.WHITE, 0, 5, 0.1f)));
+				new ReflectiveMat(Color.WHITE, 0, 5, 0.1f)));
 		scene05.addObject(OBJReader.GetPolygon("tree.obj", new Vector3D(2.0, -2.4, 3.0),
 				new RefractiveMat(Color.WHITE, 0, 5, 0.1f, 1.5)));
 		scene05.addObject(OBJReader.GetPolygon("tree.obj", new Vector3D(-2.0, -2.4, 3.0),
@@ -201,13 +216,12 @@ public class Raytracer {
 		scene05.addObject(OBJReader.GetPolygon("bigCube.obj", new Vector3D(0, -2.4, 1.0),
 				new RefractiveMat(Color.WHITE, 0, 75, 0.01f, 1.5)));
 		scene05.addObject(OBJReader.GetPolygon("sword.obj", new Vector3D(0, -2.4, 1.0),
-				new ReflectiveMat(Color.WHITE, 0, 75, 0.01f)));
-		
+				new ReflectiveMat(Color.RED, 0, 5, 0.01f)));
 		/****************** SCENE FINISH ****************/
 
-		System.out.println(new Date());
-		BufferedImage image = raytrace(scene05);
-		File outputImage = new File("scene05_testVersion.png");
+		
+		BufferedImage image = raytrace(scene02);
+		File outputImage = new File("scene02_testVersion.png");
 		try {
 			ImageIO.write(image, "png", outputImage);
 		} catch (IOException ex) {
