@@ -1,0 +1,25 @@
+/*** SCENE 01  ***/
+Objects:
+	- Spheres
+	- Utah Teapot
+	- Stanford Venus
+	- Plane (Floor)
+	
+Render Time:
+	Mon May 27 00:05:52 CDT 2019 -> Mon May 27 00:41:29 CDT 2019
+	-> 0 hours, 35 minutes and 37 seconds
+
+/*** SCENE 02 ***/
+Objects:
+	
+Render Time:
+
+/*** SCENE 03 ***/
+Objects:
+	- Stanford Bunny
+	- Spheres
+	- Plane (Floor)
+	
+Render Time:
+	Sun May 26 22:33:34 CDT 2019 -> Sun May 26 22:52:18 CDT 2019
+	-> 0 hours, 18 minutes and 44 seconds
