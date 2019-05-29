@@ -1,3 +1,8 @@
+Alan Enrique Maldonado Navarro
+ISGC @ UP
+Rendering Context for the Java Raytracer
+Github page: https://github.com/DrN3MESiS/javaraytracer
+
 /*** SCENE 01  ***/
 Objects:
 	- Spheres
@@ -11,8 +16,17 @@ Render Time:
 
 /*** SCENE 02 ***/
 Objects:
+	- MIT Atenea
+	- Utah Teapot
+	- Spheres
+	- Cubes
+	- Vertical Panel
+	- Floor Panel
+	- Plant
 	
 Render Time:
+	Tue May 28 17:55:10 CDT 2019 -> Tue May 28 18:44:09 CDT 2019
+	-> 0 hours, 48 minutes and 59 seconds
 
 /*** SCENE 03 ***/
 Objects:
@@ -23,3 +37,18 @@ Objects:
 Render Time:
 	Sun May 26 22:33:34 CDT 2019 -> Sun May 26 22:52:18 CDT 2019
 	-> 0 hours, 18 minutes and 44 seconds
+	
+/*** SCENE 04 ***/
+Objects:
+	- Sword
+	- Vertical Panel
+	- Cube
+	- Tree
+	- Floor Panel
+
+Render Time:
+	Tue May 28 20:21:12 CDT 2019 -> Tue May 28 20:27:51 CDT 2019
+	-> 0 hours, 6 minutes and 39 seconds
+
+
+	

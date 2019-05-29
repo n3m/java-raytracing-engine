@@ -207,8 +207,20 @@ public class Raytracer {
 				new ReflectiveMat(Color.CYAN, 0, 5, 0.1f)));
 		scene04.addObject(
 				OBJReader.GetPolygon("bigBar.obj", new Vector3D(0, -3, 5), new ReflectiveMat(Color.GRAY, 0, 5, 0.01f)));
+		
 		scene05.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0.0, -2.5, 1.0),
-				new ReflectiveMat(Color.WHITE, 0, 5, 0.1f)));
+						new LambertMat(Color.PINK, 0, 5, 0.1f)));
+		scene05.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(0, -2.5, 5.55),
+						new LambertMat(Color.PINK, 0, 5, 0.1f)));
+		scene05.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(4.55, -2.5, 1),
+						new LambertMat(Color.PINK, 0, 5, 0.1f)));
+		scene05.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(4.55, -2.5, 5.55),
+						new LambertMat(Color.PINK, 0, 5, 0.1f)));
+		scene05.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(-4.55, -2.5, 1),
+						new LambertMat(Color.PINK, 0, 5, 0.1f)));
+		scene05.addObject(OBJReader.GetPolygon("panel.obj", new Vector3D(-4.55, -2.5, 5.55),
+						new LambertMat(Color.PINK, 0, 5, 0.1f)));
+
 		scene05.addObject(OBJReader.GetPolygon("tree.obj", new Vector3D(2.0, -2.4, 3.0),
 				new RefractiveMat(Color.WHITE, 0, 5, 0.1f, 1.5)));
 		scene05.addObject(OBJReader.GetPolygon("tree.obj", new Vector3D(-2.0, -2.4, 3.0),
@@ -216,12 +228,12 @@ public class Raytracer {
 		scene05.addObject(OBJReader.GetPolygon("bigCube.obj", new Vector3D(0, -2.4, 1.0),
 				new RefractiveMat(Color.WHITE, 0, 75, 0.01f, 1.5)));
 		scene05.addObject(OBJReader.GetPolygon("sword.obj", new Vector3D(0, -2.4, 1.0),
-				new ReflectiveMat(Color.RED, 0, 5, 0.01f)));
+				new LambertMat(Color.ORANGE, 0, 5, 0.01f)));
 		/****************** SCENE FINISH ****************/
 
 		
-		BufferedImage image = raytrace(scene02);
-		File outputImage = new File("scene02_testVersion.png");
+		BufferedImage image = raytrace(scene05);
+		File outputImage = new File("scene05_testVersion.png");
 		try {
 			ImageIO.write(image, "png", outputImage);
 		} catch (IOException ex) {
